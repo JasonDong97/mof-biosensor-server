@@ -1,0 +1,27 @@
+2026-03-26 16:55:15.443 [http-nio-9093-exec-5] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未知错误
+No static resource /doc.html.
+
+2026-03-26 16:55:37.441 [http-nio-9093-exec-10] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未知错误
+No static resource /doc.html.
+
+2026-03-26 16:58:01.065 [http-nio-9093-exec-2] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 16:59:55.414 [http-nio-9093-exec-9] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未知错误
+No static resource /doc.html.
+
+2026-03-26 17:02:09.249 [http-nio-9093-exec-1] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:04:10.043 [http-nio-9093-exec-3] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:06:14.661 [http-nio-9093-exec-3] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:06:17.621 [http-nio-9093-exec-7] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:10:31.452 [http-nio-9093-exec-2] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:11:49.399 [http-nio-9093-exec-3] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:12:26.759 [http-nio-9093-exec-4] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:13:51.315 [http-nio-9093-exec-2] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/doc.html, 未登录
+2026-03-26 17:14:34.476 [http-nio-9093-exec-10] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/favicon.ico, 未知错误
+No static resource favicon.ico.
+
+2026-03-26 17:17:00.731 [http-nio-9093-exec-8] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/favicon.ico, 未知错误
+No static resource favicon.ico.
+
+2026-03-26 17:19:34.950 [http-nio-9093-exec-9] ERROR error_log - [127.0.0.1][未登录用户] GET - /api/favicon.ico, 未知错误
+No static resource favicon.ico.
+

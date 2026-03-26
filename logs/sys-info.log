@@ -1,0 +1,348 @@
+2026-03-26 16:55:07.329 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 1788 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 16:55:07.330 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 16:55:07.955 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:55:07.956 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 16:55:07.968 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 16:55:07.979 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:55:07.979 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 16:55:07.989 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2026-03-26 16:55:08.494 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 16:55:08.503 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:55:08.505 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 16:55:08.505 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 16:55:08.563 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 16:55:08.564 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1196 ms
+2026-03-26 16:55:08.758 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 16:55:09.416 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@59221b97
+2026-03-26 16:55:09.720 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 16:55:10.012 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@a4dcede
+2026-03-26 16:55:10.013 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 16:55:10.161 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:55:10.178 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 16:55:10.187 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.424 seconds (process running for 4.207)
+2026-03-26 16:55:15.388 [http-nio-9093-exec-5] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 16:55:15.388 [http-nio-9093-exec-5] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 16:55:15.389 [http-nio-9093-exec-5] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 16:57:26.268 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 16:57:31.135 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 23732 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 16:57:31.137 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 16:57:31.828 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:57:31.829 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 16:57:31.842 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 16:57:31.853 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:57:31.854 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 16:57:31.865 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 16:57:32.395 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 16:57:32.406 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:57:32.407 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 16:57:32.408 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 16:57:32.467 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 16:57:32.467 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1290 ms
+2026-03-26 16:57:32.674 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 16:57:33.403 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@2bffa76d
+2026-03-26 16:57:33.732 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 16:57:34.049 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@40b8158d
+2026-03-26 16:57:34.050 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 16:57:34.193 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:57:34.216 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 16:57:34.224 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.719 seconds (process running for 4.585)
+2026-03-26 16:58:01.011 [http-nio-9093-exec-2] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 16:58:01.011 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 16:58:01.012 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 16:59:44.531 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 16:59:49.233 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 35304 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 16:59:49.235 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 16:59:49.889 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:59:49.890 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 16:59:49.902 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 16:59:49.912 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 16:59:49.913 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 16:59:49.922 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2026-03-26 16:59:50.422 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 16:59:50.432 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:59:50.434 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 16:59:50.434 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 16:59:50.492 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 16:59:50.492 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1216 ms
+2026-03-26 16:59:50.690 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 16:59:51.359 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@2bffa76d
+2026-03-26 16:59:51.671 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 16:59:51.998 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@40b8158d
+2026-03-26 16:59:52.000 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 16:59:52.136 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 16:59:52.158 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 16:59:52.167 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.546 seconds (process running for 4.434)
+2026-03-26 16:59:55.360 [http-nio-9093-exec-9] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 16:59:55.360 [http-nio-9093-exec-9] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 16:59:55.361 [http-nio-9093-exec-9] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:01:54.863 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:01:59.105 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 26140 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:01:59.107 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:01:59.720 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:01:59.721 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:01:59.733 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:01:59.743 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:01:59.744 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:01:59.759 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:02:00.254 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:02:00.264 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:02:00.265 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:02:00.265 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:02:00.325 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:02:00.325 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1180 ms
+2026-03-26 17:02:00.517 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:02:01.187 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:02:01.495 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:02:01.788 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@3487947c
+2026-03-26 17:02:01.790 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:02:01.927 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:02:01.944 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:02:01.953 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.408 seconds (process running for 4.186)
+2026-03-26 17:02:09.200 [http-nio-9093-exec-1] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:02:09.201 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:02:09.201 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-03-26 17:03:57.002 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:04:01.258 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 6652 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:04:01.259 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:04:01.915 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:04:01.916 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:04:01.928 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:04:01.939 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:04:01.940 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:04:01.950 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:04:02.475 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:04:02.486 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:04:02.487 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:04:02.487 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:04:02.550 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:04:02.550 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1251 ms
+2026-03-26 17:04:02.756 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:04:03.466 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:04:03.796 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:04:04.229 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@2a341e3d
+2026-03-26 17:04:04.232 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:04:04.435 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:04:04.467 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:04:04.479 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.833 seconds (process running for 4.672)
+2026-03-26 17:04:09.986 [http-nio-9093-exec-3] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:04:09.987 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:04:09.988 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:05:57.423 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:06:02.522 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 18624 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:06:02.524 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:06:03.222 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:06:03.223 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:06:03.236 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:06:03.248 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:06:03.249 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:06:03.262 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:06:03.810 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:06:03.821 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:06:03.823 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:06:03.824 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:06:03.890 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:06:03.891 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1325 ms
+2026-03-26 17:06:04.113 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:06:04.878 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:06:05.198 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:06:05.534 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@2a341e3d
+2026-03-26 17:06:05.535 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:06:05.688 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:06:05.705 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:06:05.719 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.806 seconds (process running for 4.622)
+2026-03-26 17:06:14.606 [http-nio-9093-exec-3] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:06:14.606 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:06:14.607 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:10:20.011 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:10:20.786 [tomcat-shutdown] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-26 17:10:20.797 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Shutdown initiated...
+2026-03-26 17:10:20.808 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Shutdown completed.
+2026-03-26 17:10:24.948 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 36572 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:10:24.951 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:10:25.655 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:10:25.657 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:10:25.671 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:10:25.683 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:10:25.684 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:10:25.697 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:10:26.258 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:10:26.269 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:10:26.271 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:10:26.271 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:10:26.340 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:10:26.340 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1351 ms
+2026-03-26 17:10:26.539 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - 配置 SaToken 拦截器，排除路径：/api/login, /api/logout, /favicon.ico, /api/doc.html, /api/swagger-ui/**, /api/swagger-resources/**, /api/v2/api-docs, /api/v3/api-docs/**, /api/webjars/**, /api/actuator/**, /api/oauth2/**, /api/error/**
+2026-03-26 17:10:26.569 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:10:27.299 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:10:27.627 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:10:27.942 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@46590dd0
+2026-03-26 17:10:27.943 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:10:28.090 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:10:28.112 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:10:28.122 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.744 seconds (process running for 4.573)
+2026-03-26 17:10:31.399 [http-nio-9093-exec-2] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:10:31.399 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:10:31.400 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:11:39.164 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:11:44.018 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 35588 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:11:44.020 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:11:44.685 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:11:44.686 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:11:44.698 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:11:44.711 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:11:44.712 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:11:44.722 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:11:45.263 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:11:45.274 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:11:45.275 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:11:45.275 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:11:45.338 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:11:45.338 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1279 ms
+2026-03-26 17:11:45.520 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/api/login, /api/logout, /favicon.ico, /api/doc.html, /api/swagger-ui/**, /api/swagger-resources/**, /api/v2/api-docs, /api/v3/api-docs/**, /api/webjars/**, /api/actuator/**, /api/oauth2/**, /api/error/**
+2026-03-26 17:11:45.545 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:11:46.255 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:11:46.574 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:11:46.889 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@69a3bf40
+2026-03-26 17:11:46.891 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:11:47.038 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:11:47.056 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:11:47.065 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.682 seconds (process running for 4.523)
+2026-03-26 17:11:49.341 [http-nio-9093-exec-3] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:11:49.342 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:11:49.343 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:13:31.338 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:13:35.011 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 20380 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:13:35.013 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:13:35.639 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:13:35.640 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:13:35.652 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:13:35.662 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:13:35.663 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:13:35.674 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:13:36.184 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:13:36.194 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:13:36.195 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:13:36.197 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:13:36.256 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:13:36.256 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1205 ms
+2026-03-26 17:13:36.428 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/api/login, /api/logout, /favicon.ico, /api/doc.html*/**, /api/swagger-ui/**, /api/swagger-resources/**, /api/v2/api-docs, /api/v3/api-docs/**, /api/webjars/**, /api/actuator/**, /api/oauth2/**, /api/error/**
+2026-03-26 17:13:36.452 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:13:37.123 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:13:37.428 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:13:37.725 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@3117ac8d
+2026-03-26 17:13:37.726 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:13:37.866 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:13:37.885 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:13:37.894 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.462 seconds (process running for 4.25)
+2026-03-26 17:13:40.460 [http-nio-9093-exec-2] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:13:40.461 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:13:40.461 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-03-26 17:14:23.650 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:14:28.005 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 21428 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:14:28.007 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:14:28.644 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:14:28.645 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:14:28.657 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:14:28.666 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:14:28.667 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:14:28.677 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:14:29.177 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:14:29.187 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:14:29.188 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:14:29.188 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:14:29.247 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:14:29.247 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1202 ms
+2026-03-26 17:14:29.419 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/login, /logout, /favicon.ico, /doc.html*/**, /swagger-ui/**, /swagger-resources/**, /v2/api-docs, /v3/api-docs/**, /webjars/**, /actuator/**, /oauth2/**, /error/**
+2026-03-26 17:14:29.442 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:14:30.103 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:14:30.401 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:14:30.702 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@20d3fff4
+2026-03-26 17:14:30.703 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:14:30.846 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:14:30.863 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:14:30.873 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.445 seconds (process running for 4.207)
+2026-03-26 17:14:33.742 [http-nio-9093-exec-3] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:14:33.742 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:14:33.743 [http-nio-9093-exec-3] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:14:34.657 [http-nio-9093-exec-2] INFO  org.springdoc.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 117 ms
+2026-03-26 17:16:46.608 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:16:51.403 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 29740 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:16:51.405 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:16:52.067 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:16:52.068 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:16:52.079 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:16:52.091 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:16:52.092 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:16:52.107 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:16:52.638 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:16:52.649 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:16:52.651 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:16:52.651 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:16:52.713 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:16:52.713 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1270 ms
+2026-03-26 17:16:52.900 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/login, /logout, /favicon.ico, /doc.html*/**, /swagger-ui/**, /swagger-resources/**, /v2/api-docs, /v3/api-docs/**, /webjars/**, /actuator/**, /oauth2/**, /error/**
+2026-03-26 17:16:52.925 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:16:53.644 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:16:53.962 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:16:54.286 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@346330b6
+2026-03-26 17:16:54.287 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:16:54.437 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:16:54.461 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:16:54.470 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.667 seconds (process running for 4.488)
+2026-03-26 17:17:00.000 [http-nio-9093-exec-4] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:17:00.000 [http-nio-9093-exec-4] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:17:00.001 [http-nio-9093-exec-4] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:17:00.922 [http-nio-9093-exec-1] INFO  org.springdoc.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 123 ms
+2026-03-26 17:17:04.886 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:17:08.086 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 13340 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:17:08.088 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:17:08.765 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:17:08.766 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:17:08.777 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:17:08.789 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:17:08.789 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:17:08.804 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:17:09.328 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:17:09.339 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:17:09.340 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:17:09.340 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:17:09.401 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:17:09.401 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1274 ms
+2026-03-26 17:17:09.585 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/login, /logout, /favicon.ico, /doc.html*/**, /swagger-ui/**, /swagger-resources/**, /v2/api-docs, /v3/api-docs/**, /webjars/**, /actuator/**, /oauth2/**, /error/**
+2026-03-26 17:17:09.612 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:17:35.051 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:17:35.386 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:17:35.716 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@467cd4b9
+2026-03-26 17:17:35.718 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:17:35.863 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:17:35.886 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:17:35.895 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 28.402 seconds (process running for 29.22)
+2026-03-26 17:19:17.970 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 17:19:22.308 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Starting MofBasedBiosensorApplication using Java 17.0.12 with PID 10756 (D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server\target\classes started by PC in D:\code\work\2-bio-group\mof-biosensor\mof-biosensor-server)
+2026-03-26 17:19:22.309 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - The following 2 profiles are active: "knife4j", "dev"
+2026-03-26 17:19:22.962 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:19:22.963 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-03-26 17:19:22.976 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 6 ms. Found 0 JDBC repository interfaces.
+2026-03-26 17:19:22.986 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-26 17:19:22.987 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-26 17:19:23.002 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-03-26 17:19:23.522 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 9093 (http)
+2026-03-26 17:19:23.533 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:19:23.534 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 17:19:23.534 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-26 17:19:23.595 [main] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2026-03-26 17:19:23.595 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1246 ms
+2026-03-26 17:19:23.769 [main] INFO  c.m.biosensor.infra.config.SaTokenConfigration - SaToken 拦截器配置完成，排除路径：/favicon.ico, /login, /logout, /doc.html*/**, /swagger-ui/**, /swagger-resources/**, /v2/api-docs, /v3/api-docs/**, /webjars/**, /actuator/**, /oauth2/**, /error/**
+2026-03-26 17:19:23.793 [main] INFO  o.s.v.beanvalidation.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-26 17:19:24.474 [main] INFO  c.b.m.e.spring.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@3b718392
+2026-03-26 17:19:24.779 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Starting...
+2026-03-26 17:19:25.086 [main] INFO  com.zaxxer.hikari.pool.HikariPool - MiQroProbeHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@5bb3dee7
+2026-03-26 17:19:25.086 [main] INFO  com.zaxxer.hikari.HikariDataSource - MiQroProbeHikariPool - Start completed.
+2026-03-26 17:19:25.228 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9093"]
+2026-03-26 17:19:25.252 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 9093 (http) with context path '/api'
+2026-03-26 17:19:25.260 [main] INFO  c.miqroera.biosensor.MofBasedBiosensorApplication - Started MofBasedBiosensorApplication in 3.54 seconds (process running for 4.342)
+2026-03-26 17:19:34.199 [http-nio-9093-exec-5] INFO  o.a.c.c.ContainerBase.[Tomcat].[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 17:19:34.200 [http-nio-9093-exec-5] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 17:19:34.201 [http-nio-9093-exec-5] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 17:19:35.123 [http-nio-9093-exec-6] INFO  org.springdoc.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 111 ms
+2026-03-26 17:44:11.912 [SpringApplicationShutdownHook] INFO  o.s.boot.web.embedded.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete

@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.36.160.33:3306/biosensor?serverTimezone=Asia/Shanghai
+    username: root
+    password: EybTcTBcJCdjwOFh
+    hikari:
+      # 连接池配置注释
+      # 最小空闲连接数，保持连接池中最少空闲连接数量
+      minimum-idle: 10
+      # 连接池最大连接数，控制连接池能创建的最大连接数
+      maximum-pool-size: 200
+      # 连接空闲超时时间(毫秒)，超过此时间空闲连接将被释放
+      idle-timeout: 30000
+      # 连接获取超时时间(毫秒)，从池中获取连接的最大等待时间
+      connection-timeout: 30000
+      # 连接最大存活时间(毫秒)，超过此时间连接将被移除
+      max-lifetime: 1800000
+      # 连接测试查询语句，用于验证连接是否有效
+      connection-test-query: SELECT 1
+      # 连接池名称，用于标识连接池
+      pool-name: MiQroProbeHikariPool
+      # 是否自动提交事务，设置为true表示每个SQL语句自动提交
+      auto-commit: true
+  data:
+    redis:
+      host: 10.36.160.33
+      port: 31105
+      password: 'psQ!4Tr$!qSzk@'
+      database: 4

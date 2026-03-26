@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+    
+    <!-- 日志存储路径 -->
+    <property name="LOG_PATH" value="./logs"/>
+    
+    <!-- 应用名称 -->
+    <property name="APP_NAME" value="mof-based-biosensor"/>
+    
+    <!-- 日志保留天数：1 年 -->
+    <property name="LOG_MAX_HISTORY" value="365"/>
+    
+    <!-- 单个日志文件最大大小 -->
+    <property name="MAX_FILE_SIZE" value="100MB"/>
+    
+    <!-- 控制台日志输出模式 -->
+    <property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+    
+    <!-- 文件日志输出模式 -->
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 系统日志文件输出 -->
+    <appender name="SYS_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/sys-info.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/sys-info.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 日志保留 1 年 -->
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <!-- 日志总大小限制（可选，防止磁盘占满） -->
+            <totalSizeCap>50GB</totalSizeCap>
+            <!-- 清理历史日志 -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!-- 只记录 INFO 及以上级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 错误日志文件输出 -->
+    <appender name="SYS_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/sys-error.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/sys-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 日志保留 1 年 -->
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!-- 只记录 ERROR 级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 开发环境配置 -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SYS_INFO"/>
+            <appender-ref ref="SYS_ERROR"/>
+        </root>
+        
+        <!-- 业务日志 -->
+        <logger name="com.miqroera.biosensor" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SYS_INFO"/>
+            <appender-ref ref="SYS_ERROR"/>
+        </logger>
+        
+        <!-- SQL 日志输出 -->
+        <logger name="org.springframework.jdbc.core" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SYS_INFO"/>
+        </logger>
+        
+        <!-- MyBatis Plus SQL 日志 -->
+        <logger name="com.baomidou.mybatisplus.core" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SYS_INFO"/>
+        </logger>
+    </springProfile>
+
+    <!-- 生产环境配置 -->
+    <springProfile name="!dev">
+        <root level="INFO">
+            <appender-ref ref="SYS_INFO"/>
+            <appender-ref ref="SYS_ERROR"/>
+        </root>
+        
+        <!-- 业务日志 -->
+        <logger name="com.miqroera.biosensor" level="INFO" additivity="false">
+            <appender-ref ref="SYS_INFO"/>
+            <appender-ref ref="SYS_ERROR"/>
+        </logger>
+    </springProfile>
+
+</configuration>

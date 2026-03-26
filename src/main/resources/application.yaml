@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: mof-based-biosensor

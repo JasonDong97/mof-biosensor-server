@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 @Schema(name = "Feedback", description = "用户反馈表")
 public class Feedback implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

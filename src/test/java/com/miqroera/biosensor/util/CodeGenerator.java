@@ -24,7 +24,7 @@ public class CodeGenerator {
         String password = "EybTcTBcJCdjwOFh";
         String module = ".";
         String[] tableNames = {
-                "sys_config"
+                "sys_user"
         };
 
         FastAutoGenerator.create(url, username, password)

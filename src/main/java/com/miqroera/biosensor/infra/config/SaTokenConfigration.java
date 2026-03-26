@@ -25,17 +25,18 @@ public class SaTokenConfigration implements WebMvcConfigurer {
      */
     private static final String[] EXCLUDE_PATH_PATTERNS = {
             "/favicon.ico",
-            "/login",              // 登录接口
-            "/logout",             // 登出接口
-            "/doc.html*/**",       // Knife4j 文档页面
-            "/swagger-ui/**",      // Swagger UI 资源
-            "/swagger-resources/**", // Swagger 资源
-            "/v2/api-docs",        // OpenAPI v2 JSON
-            "/v3/api-docs/**",     // OpenAPI v3 JSON
-            "/webjars/**",         // WebJars 静态资源
-            "/actuator/**",        // Actuator 端点
-            "/oauth2/**",          // OAuth2 相关
-            "/error/**"            // 错误页面
+            "/api/v1/auth/login/**",  // 登录接口
+            "/api/v1/auth/logout",    // 登出接口
+            "/api/v1/auth/refresh",   // 刷新 Token 接口
+            "/doc.html*/**",          // Knife4j 文档页面
+            "/swagger-ui/**",         // Swagger UI 资源
+            "/swagger-resources/**",  // Swagger 资源
+            "/v2/api-docs",           // OpenAPI v2 JSON
+            "/v3/api-docs/**",        // OpenAPI v3 JSON
+            "/webjars/**",            // WebJars 静态资源
+            "/actuator/**",           // Actuator 端点
+            "/oauth2/**",             // OAuth2 相关
+            "/error/**"               // 错误页面
     };
 
     @Value("${server.servlet.context-path}")

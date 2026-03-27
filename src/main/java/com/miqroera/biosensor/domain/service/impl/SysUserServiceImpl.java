@@ -7,6 +7,7 @@ import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.SysUser;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
+import com.miqroera.biosensor.domain.model.dto.UserProfileUpdateDTO;
 import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
 import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
 import com.miqroera.biosensor.domain.model.vo.TokenVO;
@@ -118,6 +119,63 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void logout() {
         log.info("退出登录");
         StpUtil.logout();
+    }
+
+    @Override
+    public UserInfoVO getUserProfile(Long userId) {
+        log.info("获取用户信息，userId: {}", userId);
+        SysUser user = getById(userId);
+        if (user == null) {
+            throw new ServiceException("用户不存在");
+        }
+
+        return UserInfoVO.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .nickName(user.getNickName())
+                .avatar(user.getAvatar())
+                .sex(user.getSex())
+                .phonenumber(maskPhone(user.getPhonenumber()))
+                .userType(user.getUserType())
+                .birthday(user.getBirthday())
+                .height(user.getHeight())
+                .weight(user.getWeight())
+                .firstMeasureDate(user.getFirstMeasureDate())
+                .totalMeasures(user.getTotalMeasures())
+                .build();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUserProfile(Long userId, UserProfileUpdateDTO dto) {
+        log.info("更新用户信息，userId: {}, dto: {}", userId, dto);
+
+        SysUser user = getById(userId);
+        if (user == null) {
+            throw new ServiceException("用户不存在");
+        }
+
+        if (dto.getNickName() != null) {
+            user.setNickName(dto.getNickName());
+        }
+        if (dto.getSex() != null) {
+            user.setSex(dto.getSex());
+        }
+        if (dto.getAvatar() != null) {
+            user.setAvatar(dto.getAvatar());
+        }
+        if (dto.getBirthday() != null) {
+            user.setBirthday(dto.getBirthday());
+        }
+        if (dto.getHeight() != null) {
+            user.setHeight(dto.getHeight());
+        }
+        if (dto.getWeight() != null) {
+            user.setWeight(dto.getWeight());
+        }
+
+        updateById(user);
+        log.info("用户信息更新成功，userId: {}", userId);
     }
 
     /**

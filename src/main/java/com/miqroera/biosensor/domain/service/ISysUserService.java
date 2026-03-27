@@ -2,8 +2,10 @@ package com.miqroera.biosensor.domain.service;
 
 import com.miqroera.biosensor.domain.model.SysUser;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
+import com.miqroera.biosensor.domain.model.dto.UserProfileUpdateDTO;
 import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
 import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
+import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -44,4 +46,20 @@ public interface ISysUserService extends IService<SysUser> {
      * 退出登录
      */
     void logout();
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    UserInfoVO getUserProfile(Long userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param userId 用户ID
+     * @param dto    更新参数
+     */
+    void updateUserProfile(Long userId, UserProfileUpdateDTO dto);
 }

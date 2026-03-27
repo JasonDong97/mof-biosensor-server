@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * 用户信息响应 VO
@@ -62,4 +63,34 @@ public class UserInfoVO implements Serializable {
      */
     @Schema(description = "用户类型（0-普通用户 1-管理员）", example = "0")
     private String userType;
+
+    /**
+     * 出生日期
+     */
+    @Schema(description = "出生日期")
+    private LocalDate birthday;
+
+    /**
+     * 身高(cm)
+     */
+    @Schema(description = "身高(cm)")
+    private Float height;
+
+    /**
+     * 体重(kg)
+     */
+    @Schema(description = "体重(kg)")
+    private Float weight;
+
+    /**
+     * 首次检测日期
+     */
+    @Schema(description = "首次检测日期")
+    private LocalDate firstMeasureDate;
+
+    /**
+     * 累计检测次数
+     */
+    @Schema(description = "累计检测次数")
+    private Integer totalMeasures;
 }

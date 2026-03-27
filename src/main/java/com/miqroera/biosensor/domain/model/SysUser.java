@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -80,6 +81,36 @@ public class SysUser implements Serializable {
      */
     @Schema(description = "头像地址")
     private String avatar;
+
+    /**
+     * 出生日期
+     */
+    @Schema(description = "出生日期")
+    private LocalDate birthday;
+
+    /**
+     * 身高(cm)
+     */
+    @Schema(description = "身高(cm)")
+    private Float height;
+
+    /**
+     * 体重(kg)
+     */
+    @Schema(description = "体重(kg)")
+    private Float weight;
+
+    /**
+     * 首次检测日期
+     */
+    @Schema(description = "首次检测日期")
+    private LocalDate firstMeasureDate;
+
+    /**
+     * 累计检测次数
+     */
+    @Schema(description = "累计检测次数")
+    private Integer totalMeasures;
 
     /**
      * 密码

@@ -13,6 +13,7 @@ import com.miqroera.biosensor.domain.model.vo.TokenVO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
 import com.miqroera.biosensor.domain.service.ISysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.miqroera.biosensor.infra.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,22 @@ import java.time.LocalDateTime;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
+    private final RedisUtil redisUtil;
+
     /**
      * Token 过期时间（秒）- 7 天
      */
     private static final long TOKEN_TIMEOUT = 7 * 24 * 60 * 60;
+
+    /**
+     * Refresh Token 前缀
+     */
+    private static final String REFRESH_TOKEN_PREFIX = "auth:refresh:";
+
+    /**
+     * Refresh Token 过期时间（秒）- 30 天
+     */
+    private static final long REFRESH_TOKEN_TIMEOUT = 30 * 24 * 60 * 60;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -45,13 +58,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // TODO: 调用微信接口，通过 code 获取 openid
         // 这里暂时使用 mock 数据，实际开发需要替换为真实的微信 API 调用
-        String openid = mockGetWxOpenid(dto.getCode());
+        String openid = "mock_openid_" + dto.getCode();
 
         // 查询或创建用户
         SysUser user = getOrCreateUserByOpenid(openid, dto);
 
-        // 生成 Token
-        return buildAuthResponse(user);
+        // 构建认证响应（带 Refresh Token）
+        return buildAuthResponseWithRefreshToken(user);
     }
 
     @Override
@@ -61,25 +74,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // TODO: 验证短信验证码
         // 这里暂时使用 mock 数据，实际开发需要替换为真实的短信验证逻辑
-        boolean valid = mockVerifySmsCode(dto.getPhone(), dto.getCode());
-        if (!valid) {
+        if (!"123456".equals(dto.getCode())) {
             throw new ServiceException("验证码错误");
         }
 
         // 查询或创建用户
         SysUser user = getOrCreateUserByPhone(dto.getPhone());
 
-        // 生成 Token
-        return buildAuthResponse(user);
+        // 构建认证响应（带 Refresh Token）
+        return buildAuthResponseWithRefreshToken(user);
     }
 
     @Override
     public AuthResponseVO refreshToken(String refreshToken) {
         log.info("刷新 Token");
 
-        // TODO: 验证 refresh token
-        // 这里暂时使用 mock 数据
-        Long userId = mockVerifyRefreshToken(refreshToken);
+        // 验证 Refresh Token
+        Long userId = verifyRefreshToken(refreshToken);
         if (userId == null) {
             throw new ServiceException("Refresh Token 无效或已过期");
         }
@@ -90,11 +101,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new ServiceException("用户不存在");
         }
 
+        // 检查用户状态
+        if (!"0".equals(user.getStatus())) {
+            throw new ServiceException("账号已被禁用");
+        }
+
         // 重新登录生成新 Token
         StpUtil.logout(userId);
         StpUtil.login(userId);
 
-        return buildAuthResponse(user);
+        // 生成新的 Refresh Token
+        return buildAuthResponseWithRefreshToken(user);
     }
 
     @Override
@@ -153,17 +170,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 构建认证响应
+     * 构建认证响应（带 Refresh Token）
      */
-    private AuthResponseVO buildAuthResponse(SysUser user) {
+    private AuthResponseVO buildAuthResponseWithRefreshToken(SysUser user) {
         // 登录并获取 Token
         StpUtil.login(user.getId());
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
 
+        // 生成新的 Refresh Token
+        String newRefreshToken = generateRefreshToken(user.getId());
+
         // 构建 Token VO
         TokenVO tokenVO = TokenVO.builder()
                 .accessToken(tokenInfo.getTokenValue())
-                .refreshToken(tokenInfo.getTokenValue()) // 简化处理，refresh token 与 access token 相同
+                .refreshToken(newRefreshToken)
                 .expiresIn(TOKEN_TIMEOUT)
                 .tokenType("Bearer")
                 .build();
@@ -190,6 +210,49 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
+     * 生成 Refresh Token
+     */
+    private String generateRefreshToken(Long userId) {
+        // 生成唯一的 refresh token（使用 UUID + userId）
+        String refreshToken = "rt_" + userId + "_" + java.util.UUID.randomUUID().toString().replace("-", "");
+        
+        // 存储到 Redis，格式：auth:refresh:{token} -> userId
+        String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
+        redisUtil.set(redisKey, userId.toString(), REFRESH_TOKEN_TIMEOUT);
+        
+        log.debug("生成 Refresh Token: {}, userId: {}, 过期时间：{}秒", refreshToken, userId, REFRESH_TOKEN_TIMEOUT);
+        
+        return refreshToken;
+    }
+
+    /**
+     * 验证 Refresh Token
+     */
+    private Long verifyRefreshToken(String refreshToken) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            return null;
+        }
+        
+        // 从 Redis 中查询
+        String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
+        Object value = redisUtil.get(redisKey);
+        
+        if (value == null) {
+            log.debug("Refresh Token 不存在或已过期：{}", refreshToken);
+            return null;
+        }
+        
+        try {
+            Long userId = Long.parseLong(value.toString());
+            log.debug("Refresh Token 验证成功：{}, userId: {}", refreshToken, userId);
+            return userId;
+        } catch (NumberFormatException e) {
+            log.error("Refresh Token 格式错误：{}", refreshToken, e);
+            return null;
+        }
+    }
+
+    /**
      * 手机号脱敏
      */
     private String maskPhone(String phone) {
@@ -197,31 +260,5 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return phone;
         }
         return phone.substring(0, 3) + "****" + phone.substring(7);
-    }
-
-    // ==================== Mock 方法（实际开发时替换）=====================
-
-    /**
-     * Mock: 通过微信 code 获取 openid
-     */
-    private String mockGetWxOpenid(String code) {
-        // TODO: 实际应该调用微信 API: https://api.weixin.qq.com/sns/jscode2session
-        return "mock_openid_" + code;
-    }
-
-    /**
-     * Mock: 验证短信验证码
-     */
-    private boolean mockVerifySmsCode(String phone, String code) {
-        // TODO: 实际应该验证 Redis 中的验证码
-        return "123456".equals(code);
-    }
-
-    /**
-     * Mock: 验证 Refresh Token
-     */
-    private Long mockVerifyRefreshToken(String refreshToken) {
-        // TODO: 实际应该验证 Redis 中的 refresh token
-        return 1L;
     }
 }

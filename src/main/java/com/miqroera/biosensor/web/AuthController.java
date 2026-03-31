@@ -1,6 +1,7 @@
-package com.miqroera.biosensor.api;
+package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.annotation.SaIgnore;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
 import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
 import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
@@ -11,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 认证控制器
@@ -24,9 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @Tag(name = "认证管理", description = "登录、登出、Token 刷新")
+@ApiSort(value = 2)
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/v1/auth")
 public class AuthController {
 
     private final ISysUserService sysUserService;

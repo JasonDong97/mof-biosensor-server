@@ -4,8 +4,8 @@ package com.miqroera.biosensor.infra.util;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -14,17 +14,14 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@RequiredArgsConstructor
 @Slf4j
 @Component
 @Getter
 @SuppressWarnings("ALL")
 public class RedisUtil {
-    @Autowired
-    public RedisTemplate<String, Object> redisTemplate;
+    public final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisUtil(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     /**
      * 指定缓存失效时间

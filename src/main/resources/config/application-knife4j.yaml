@@ -1,16 +1,18 @@
-# springdoc-openapi项目配置
+# springdoc-openapi 项目配置
 springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
   swagger-ui:
+    enabled: true
     path: /swagger-ui.html
     tags-sorter: alpha
     operations-sorter: alpha
-  api-docs:
-    path: /v3/api-docs
   group-configs:
     - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.miqroera.biosensor.api
-# knife4j的增强配置，不需要增强可以不配
+      paths-to-match: '/v1/**'
+      packages-to-scan: com.miqroera.biosensor.web
+# knife4j 的增强配置
 knife4j:
   enable: true
   setting:

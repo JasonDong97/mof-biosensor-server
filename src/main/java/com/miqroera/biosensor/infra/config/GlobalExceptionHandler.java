@@ -30,10 +30,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * 全局异常处理器
+ * <p>
+ * 统一处理系统中抛出的各类异常，返回标准化的错误响应
+ * </p>
  *
  * @author ruoyi
  */
@@ -42,214 +47,375 @@ import java.util.stream.Collectors;
 @Slf4j(topic = "error_log")
 public class GlobalExceptionHandler {
 
-    private static void replaceContentType() {
-        ServletUtils.getResponse().setContentType("application/json;charset=UTF-8");
+    // ==================== 常量定义 ====================
+
+    /** 系统错误码 */
+    private static final int SYSTEM_ERROR_CODE = 500;
+
+    /** JSON 内容类型 */
+    private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
+
+    /** 未知路径标识 */
+    private static final String UNKNOWN_PATH = "unknown";
+
+    // ==================== 工具方法 ====================
+
+    /**
+     * 设置响应内容类型为 JSON
+     */
+    private static void setJsonContentType() {
+        ServletUtils.getResponse().setContentType(JSON_CONTENT_TYPE);
     }
 
-    private static String getPath() {
-        try {
-            return ServletUtils.getRequest().getRequestURI();
-        } catch (Exception e) {
-            return "unknown";
-        }
-    }
-
-    public static R<?> toR(Exception e, boolean printStackTrace) {
-        return toR(500, e, StrUtil.EMPTY, printStackTrace);
-    }
-
-    public static R<?> toR(Exception e, String msg, boolean printStackTrace) {
-        return toR(500, e, msg, printStackTrace);
-    }
-
-    public static R<?> toR(int code, Exception e, String msg, boolean printStackTrace) {
+    /**
+     * 构建异常响应对象（静态方法，供外部调用）
+     *
+     * @param code 错误码
+     * @param e 异常对象
+     * @param msg 错误消息
+     * @param printStackTrace 是否打印堆栈
+     * @return 统一响应对象
+     */
+    public static R<?> toR(int code, Throwable e, String msg, boolean printStackTrace) {
         HttpServletRequest request = ServletUtils.getRequest();
+        String message = StrUtil.isEmpty(msg) ? e.getMessage() : msg;
 
-        if (StrUtil.isEmpty(msg)) {
-            msg = e.getMessage();
-        }
-
-        Object data;
+        Object responseData;
         String stackTrace = null;
         if (printStackTrace) {
-            ExceptionBO ebo = ExceptionBO.of(e, msg);
-            data = ebo;
-            stackTrace = ebo.getStackTrace();
+            ExceptionBO exceptionBO = ExceptionBO.of(e, message);
+            responseData = exceptionBO;
+            stackTrace = exceptionBO.getStackTrace();
         } else {
-            data = ExceptionUtil.getMessage(e);
+            responseData = ExceptionUtil.getMessage(e);
         }
 
-        log.error("[{}][{}] {} - {}, {}{}",
+        log.error("[{}][{}] {} - {}{}",
                 ServletUtils.getClientIP(),
                 SecurityUtils.getNickName(),
                 request.getMethod(),
                 request.getRequestURI(),
-                msg,
+                message,
                 StrUtil.isEmpty(stackTrace) ? StrUtil.EMPTY : "\n" + stackTrace);
-        return R.build(code, msg, data);
+        return R.build(code, message, responseData);
     }
-
-    public static R<?> toR(Exception e, ERROR_TYPE type, boolean printStackTrace) {
-        return toR(500, e, type.getMsg(), printStackTrace);
-    }
-
-    public static R<?> toR(int code, Exception e, ERROR_TYPE type, boolean printStackTrace) {
-        return toR(code, e, type.getMsg(), printStackTrace);
-    }
-
 
     /**
-     * 系统异常
+     * 获取当前请求路径
      *
-     * @param e Exception
-     * @return R<ExceptionBO>
+     * @return 请求 URI，获取失败返回 "unknown"
+     */
+    private static String getRequestPath() {
+        try {
+            return ServletUtils.getRequest().getRequestURI();
+        } catch (Exception e) {
+            return UNKNOWN_PATH;
+        }
+    }
+
+    /**
+     * 构建异常响应对象
+     *
+     * @param e 异常对象
+     * @return 统一响应对象
+     */
+    private static R<?> buildErrorResponse(Exception e) {
+        return buildErrorResponse(SYSTEM_ERROR_CODE, e, ErrorType.UNKNOWN.getMessage(), true);
+    }
+
+    /**
+     * 构建异常响应对象
+     *
+     * @param e 异常对象
+     * @param errorMessage 错误消息
+     * @return 统一响应对象
+     */
+    private static R<?> buildErrorResponse(Exception e, String errorMessage) {
+        return buildErrorResponse(SYSTEM_ERROR_CODE, e, errorMessage, true);
+    }
+
+    /**
+     * 构建异常响应对象
+     *
+     * @param e 异常对象
+     * @param errorType 错误类型
+     * @param printStackTrace 是否打印堆栈
+     * @return 统一响应对象
+     */
+    private static R<?> buildErrorResponse(Exception e, ErrorType errorType, boolean printStackTrace) {
+        return buildErrorResponse(SYSTEM_ERROR_CODE, e, errorType.getMessage(), printStackTrace);
+    }
+
+    /**
+     * 构建异常响应对象
+     *
+     * @param code 错误码
+     * @param e 异常对象
+     * @param errorMessage 错误消息
+     * @param printStackTrace 是否打印堆栈
+     * @return 统一响应对象
+     */
+    private static R<?> buildErrorResponse(int code, Throwable e, String errorMessage, boolean printStackTrace) {
+        HttpServletRequest request = ServletUtils.getRequest();
+        String msg = StrUtil.isEmpty(errorMessage) ? e.getMessage() : errorMessage;
+
+        Object responseData;
+        String stackTrace = null;
+        if (printStackTrace) {
+            ExceptionBO exceptionBO = ExceptionBO.of(e, msg);
+            responseData = exceptionBO;
+            stackTrace = exceptionBO.getStackTrace();
+        } else {
+            responseData = ExceptionUtil.getMessage(e);
+        }
+
+        logException(request, msg, stackTrace);
+        return R.build(code, msg, responseData);
+    }
+
+    /**
+     * 记录异常日志
+     *
+     * @param request HTTP 请求
+     * @param message 错误消息
+     * @param stackTrace 堆栈信息
+     */
+    private static void logException(HttpServletRequest request, String message, String stackTrace) {
+        log.error("[{}][{}] {} - {}{}",
+                ServletUtils.getClientIP(),
+                SecurityUtils.getNickName(),
+                request.getMethod(),
+                request.getRequestURI(),
+                message,
+                StrUtil.isEmpty(stackTrace) ? StrUtil.EMPTY : "\n" + stackTrace);
+    }
+
+    // ==================== 异常处理方法 ====================
+
+    /**
+     * 系统级异常处理
+     *
+     * @param e 未知异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(Exception.class)
-    R<?> handle(Exception e) {
-        replaceContentType();
-        return toR(e, ERROR_TYPE.UNKNOWN, true);
+    public R<?> handleException(Exception e) {
+        setJsonContentType();
+        return buildErrorResponse(e);
     }
 
     /**
-     * 非法参数异常
+     * 非法参数异常处理
      *
-     * @param e IllegalArgumentException
-     * @return R<ExceptionBO>
+     * @param e 非法参数异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    R<?> handle(IllegalArgumentException e) {
-        return toR(e, ERROR_TYPE.PARAM, true);
+    public R<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return buildErrorResponse(e, ErrorType.PARAM, true);
     }
 
     /**
-     * 业务异常
+     * 业务异常处理
      *
-     * @param e ServiceException
-     * @return R<ExceptionBO>
+     * @param e 业务异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(ServiceException.class)
-    R<?> handle(ServiceException e) {
-        String originalMessage = e.getOriginalMessage();
-        R<?> r = toR(e, true);
-        Object data = r.getData();
-        if (originalMessage != null && data instanceof ExceptionBO) {
-            ((ExceptionBO) data).setOriginalMessage(originalMessage);
-        }
-        return r;
+    public R<?> handleServiceException(ServiceException e) {
+        R<?> response = toR(SYSTEM_ERROR_CODE, e, e.getMessage(), true);
+        Optional.ofNullable(response.getData())
+                .filter(data -> data instanceof ExceptionBO)
+                .map(data -> (ExceptionBO) data)
+                .ifPresent(exceptionBO -> {
+                    String originalMessage = e.getOriginalMessage();
+                    if (originalMessage != null) {
+                        exceptionBO.setOriginalMessage(originalMessage);
+                    }
+                });
+        return response;
     }
 
     /**
-     * 未登录异常
+     * 未登录异常处理
+     *
+     * @param e 未登录异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(NotLoginException.class)
-    R<?> handle(NotLoginException e) {
-        return toR(HttpStatus.UNAUTHORIZED.value(), e, ERROR_TYPE.NO_LOGIN, false);
+    public R<?> handleNotLoginException(NotLoginException e) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED.value(), e, ErrorType.NO_LOGIN.getMessage(), false);
     }
 
     /**
-     * 权限码异常
+     * 权限不足异常处理
+     *
+     * @param e 权限不足异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(NotPermissionException.class)
-    R<?> handle(NotPermissionException e) {
-        return toR(HttpStatus.FORBIDDEN.value(), e, ERROR_TYPE.NO_PERMISSION, true);
+    public R<?> handleNotPermissionException(NotPermissionException e) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN.value(), e, ErrorType.NO_PERMISSION.getMessage(), true);
     }
 
     /**
-     * 角色权限异常
+     * 角色不足异常处理
+     *
+     * @param e 角色不足异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(NotRoleException.class)
-    R<?> handle(NotRoleException e) {
-        return toR(HttpStatus.FORBIDDEN.value(), e, ERROR_TYPE.NO_PERMISSION, true);
+    public R<?> handleNotRoleException(NotRoleException e) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN.value(), e, ErrorType.NO_PERMISSION.getMessage(), true);
     }
 
     /**
-     * 请求中断异常
+     * 客户端请求中断异常处理
+     *
+     * @param e 客户端请求中断异常
      */
     @ExceptionHandler(ClientAbortException.class)
-    void handle(ClientAbortException e) {
-        log.warn("请求中断 - {}", e.getMessage());
+    public void handleClientAbortException(ClientAbortException e) {
+        log.warn("客户端请求中断 - {}", e.getMessage());
     }
 
     /**
-     * 方法参数校验异常
+     * 方法参数校验异常处理
+     *
+     * @param e 参数校验异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    R<JSONObject> handle(MethodArgumentNotValidException e) {
-        ObjectError objectError = e.getBindingResult().getAllErrors().stream().findFirst().orElse(null);
-        R<JSONObject> fail = R.fail(objectError != null ? objectError.getDefaultMessage() : e.getMessage());
-        if (!(objectError instanceof FieldError fieldError)) {
-            return fail;
+    public R<JSONObject> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        ObjectError firstError = allErrors.isEmpty() ? null : allErrors.get(0);
+        
+        String defaultMessage = firstError != null ? firstError.getDefaultMessage() : e.getMessage();
+        R<JSONObject> response = R.fail(defaultMessage);
+        
+        if (!(firstError instanceof FieldError fieldError)) {
+            return response;
         }
 
         String field = fieldError.getField();
         Object rejectedValue = fieldError.getRejectedValue();
-        String msg = StrUtil.format("{}", fieldError.getDefaultMessage(), field, rejectedValue);
-        msg = StrUtil.replaceFirst(msg, "{field}", field);
+        String fieldErrorMessage = fieldError.getDefaultMessage();
+        
+        // 构建详细的参数错误信息
+        String detailedMessage = buildFieldErrorMessage(field, fieldErrorMessage, rejectedValue);
         JSONObject data = new JSONObject();
         data.put(field, rejectedValue);
-        fail.setMsg(field + " " + msg);
-        fail.setData(data);
-        log.warn("{}, 参数错误 - {}:{} ", getPath(), fail.getMsg(), fail.getData());
-        return fail;
+        
+        response.setMsg(detailedMessage);
+        response.setData(data);
+        
+        log.warn("参数校验失败 - 路径：{}, 错误：{}, 数据：{}", 
+                getRequestPath(), detailedMessage, data);
+        return response;
     }
 
     /**
-     * 方法参数类型不匹配异常
+     * 构建字段错误消息
+     *
+     * @param field 字段名
+     * @param defaultMessage 默认错误消息
+     * @param rejectedValue 被拒绝的值
+     * @return 格式化后的错误消息
+     */
+    private String buildFieldErrorMessage(String field, String defaultMessage, Object rejectedValue) {
+        String msg = StrUtil.format("{}", defaultMessage, field, rejectedValue);
+        msg = StrUtil.replaceFirst(msg, "{field}", field);
+        return field + " " + msg;
+    }
+
+    /**
+     * 方法参数类型不匹配异常处理
+     *
+     * @param e 参数类型不匹配异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    R<?> handle(MethodArgumentTypeMismatchException e) {
-        String msg = StrUtil.format("参数 '{}' 期望类型为 {}, 但接收的类型为 '{}', 当前值: '{}'",
-                e.getName(),
-                e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "未知",
-                e.getValue() != null ? e.getValue().getClass().getSimpleName() : "未知",
-                e.getValue());
-        return toR(e, "参数类型错误! " + msg, false);
+    public R<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        String expectedType = e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "未知";
+        String actualType = e.getValue() != null ? e.getValue().getClass().getSimpleName() : "未知";
+        String value = String.valueOf(e.getValue());
+        
+        String message = StrUtil.format("参数 '{}' 期望类型为 {}, 但接收的类型为 '{}', 当前值：'{}'",
+                e.getName(), expectedType, actualType, value);
+        return toR(SYSTEM_ERROR_CODE, e, "参数类型错误：" + message, false);
     }
 
+    /**
+     * 参数绑定异常处理
+     *
+     * @param e 参数绑定异常
+     * @return 统一响应对象
+     */
     @ExceptionHandler(BindException.class)
-    R<?> handle(BindException e) {
-        if (!e.getFieldErrors().isEmpty()) {
-            String msg = e.getFieldErrors().stream()
+    public R<?> handleBindException(BindException e) {
+        List<FieldError> fieldErrors = e.getFieldErrors();
+        if (!fieldErrors.isEmpty()) {
+            String errorMessage = fieldErrors.stream()
                     .map(err -> err.getField() + ": " + err.getRejectedValue())
                     .collect(Collectors.joining(", "));
-            return toR(e, "参数类型错误! " + msg, false);
+            return toR(SYSTEM_ERROR_CODE, e, "参数类型错误：" + errorMessage, false);
         }
-        return toR(e, ERROR_TYPE.PARAM, true);
+        return buildErrorResponse(e, ErrorType.PARAM, true);
     }
 
     /**
-     * 自定义验证异常
+     * 约束校验异常处理
+     *
+     * @param e 约束校验异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    R<?> handle(ConstraintViolationException e) {
+    public R<?> handleConstraintViolationException(ConstraintViolationException e) {
         String message = StreamUtils.join(e.getConstraintViolations(), ConstraintViolation::getMessage, ", ");
-        return toR(e, "参数验证异常:" + message, false);
+        return toR(SYSTEM_ERROR_CODE, e, "参数验证异常：" + message, false);
     }
 
     /**
-     * json 参数解析异常
+     * HTTP 消息不可读异常处理（JSON 解析失败）
      *
+     * @param e HTTP 消息不可读异常
+     * @return 统一响应对象
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    R<?> handle(HttpMessageNotReadableException e) {
-        return toR(e, ERROR_TYPE.PARAM, true);
+    public R<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return buildErrorResponse(e, ErrorType.PARAM, true);
     }
 
-
+    /**
+     * 缺少请求参数异常处理
+     *
+     * @param e 缺少请求参数异常
+     * @return 统一响应对象
+     */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    R<?> handle(MissingServletRequestParameterException e) {
-        return toR(e, "缺少参数: " + e.getParameterName(), true);
+    public R<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        return toR(SYSTEM_ERROR_CODE, e, "缺少参数：" + e.getParameterName(), true);
     }
 
+    // ==================== 内部枚举类 ====================
+
+    /**
+     * 错误类型枚举
+     */
     @Getter
     @AllArgsConstructor
-    public enum ERROR_TYPE {
+    public enum ErrorType {
+        /** 参数错误 */
         PARAM("参数错误"),
+        /** 系统错误 */
         SYSTEM("系统错误"),
+        /** 未知错误 */
         UNKNOWN("未知错误"),
+        /** 未登录 */
         NO_LOGIN("未登录"),
+        /** 没有权限 */
         NO_PERMISSION("没有权限");
-        private final String msg;
-    }
 
+        private final String message;
+    }
 }

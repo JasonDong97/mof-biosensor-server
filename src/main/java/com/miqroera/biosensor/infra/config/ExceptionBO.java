@@ -37,7 +37,7 @@ public class ExceptionBO {
     @JsonIgnore
     private String stackTrace;
 
-    public static ExceptionBO of(Exception e, String msg) {
+    public static ExceptionBO of(Throwable e, String msg) {
 
         ArrayList<String> stackTraceLines = new ArrayList<>();
         StringBuilder sb = new StringBuilder();

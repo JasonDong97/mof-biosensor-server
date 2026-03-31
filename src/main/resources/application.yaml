@@ -7,4 +7,8 @@ spring:
   application:
     name: mof-based-biosensor
   profiles:
-    active: knife4j, dev
+    active: knife4j, dev, mock
+
+logging:
+  level:
+    com.miqroera: info

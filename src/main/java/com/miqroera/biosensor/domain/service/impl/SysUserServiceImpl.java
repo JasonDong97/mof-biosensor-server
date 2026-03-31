@@ -3,7 +3,7 @@ package com.miqroera.biosensor.domain.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.miqroera.biosensor.infra.domain.exception.ServiceException;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.SysUser;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
@@ -13,10 +13,13 @@ import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
 import com.miqroera.biosensor.domain.model.vo.TokenVO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
 import com.miqroera.biosensor.domain.service.ISysUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.miqroera.biosensor.infra.domain.exception.ServiceException;
+import com.miqroera.biosensor.infra.domain.model.MockProperties;
 import com.miqroera.biosensor.infra.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,22 +38,20 @@ import java.time.LocalDateTime;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
-    private final RedisUtil redisUtil;
-
     /**
      * Token 过期时间（秒）- 7 天
      */
     private static final long TOKEN_TIMEOUT = 7 * 24 * 60 * 60;
-
     /**
      * Refresh Token 前缀
      */
     private static final String REFRESH_TOKEN_PREFIX = "auth:refresh:";
-
     /**
      * Refresh Token 过期时间（秒）- 30 天
      */
     private static final long REFRESH_TOKEN_TIMEOUT = 30 * 24 * 60 * 60;
+    private final RedisUtil redisUtil;
+    private final MockProperties mockProperties;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -59,13 +60,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // TODO: 调用微信接口，通过 code 获取 openid
         // 这里暂时使用 mock 数据，实际开发需要替换为真实的微信 API 调用
-        String openid = "mock_openid_" + dto.getCode();
+        String openid = mockOpenId(dto.getCode());
 
         // 查询或创建用户
         SysUser user = getOrCreateUserByOpenid(openid, dto);
 
         // 构建认证响应（带 Refresh Token）
         return buildAuthResponseWithRefreshToken(user);
+    }
+
+    private String mockOpenId(String code) {
+        return mockProperties.getOpenids().get(code);
     }
 
     @Override
@@ -121,6 +126,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         StpUtil.logout();
     }
 
+    @Cacheable(value = "miqrobreath:user_profile", key = "#userId")
     @Override
     public UserInfoVO getUserProfile(Long userId) {
         log.info("获取用户信息，userId: {}", userId);
@@ -145,6 +151,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .build();
     }
 
+    @CacheEvict(value = "miqrobreath:user_profile", key = "#userId")
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateUserProfile(Long userId, UserProfileUpdateDTO dto) {
@@ -273,13 +280,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private String generateRefreshToken(Long userId) {
         // 生成唯一的 refresh token（使用 UUID + userId）
         String refreshToken = "rt_" + userId + "_" + java.util.UUID.randomUUID().toString().replace("-", "");
-        
+
         // 存储到 Redis，格式：auth:refresh:{token} -> userId
         String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
         redisUtil.set(redisKey, userId.toString(), REFRESH_TOKEN_TIMEOUT);
-        
+
         log.debug("生成 Refresh Token: {}, userId: {}, 过期时间：{}秒", refreshToken, userId, REFRESH_TOKEN_TIMEOUT);
-        
+
         return refreshToken;
     }
 
@@ -290,16 +297,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (refreshToken == null || refreshToken.isEmpty()) {
             return null;
         }
-        
+
         // 从 Redis 中查询
         String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
         Object value = redisUtil.get(redisKey);
-        
+
         if (value == null) {
             log.debug("Refresh Token 不存在或已过期：{}", refreshToken);
             return null;
         }
-        
+
         try {
             Long userId = Long.parseLong(value.toString());
             log.debug("Refresh Token 验证成功：{}, userId: {}", refreshToken, userId);

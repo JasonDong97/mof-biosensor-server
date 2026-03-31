@@ -19,6 +19,13 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Dependency Versions -->
+        <mybatis-plus.version>3.5.15</mybatis-plus.version>
+        <hutool.version>5.8.44</hutool.version>
+        <fastjson.version>2.0.61</fastjson.version>
+        <sa-token.version>1.45.0</sa-token.version>
+        <knife4j.version>4.4.0</knife4j.version>
     </properties>
 
     <dependencyManagement>
@@ -26,14 +33,14 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-bom</artifactId>
-                <version>3.5.15</version>
+                <version>${mybatis-plus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-bom</artifactId>
-                <version>5.8.44</version>
+                <version>${hutool.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -95,21 +102,25 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>2.0.61</version>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <!--SaToken-->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot3-starter</artifactId>
-            <version>1.45.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
         <!--Knife4j-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
+            <version>${knife4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>

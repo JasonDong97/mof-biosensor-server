@@ -3,7 +3,7 @@ package com.miqroera.biosensor.infra.config;
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.stp.StpUtil;
-import com.miqroera.biosensor.infra.domain.exception.ServiceException;
+import com.alibaba.fastjson2.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ public class SaTokenConfigration implements WebMvcConfigurer {
     public SaTokenConfig getSaTokenConfigPrimary() {
         SaTokenConfig config = new SaTokenConfig();
         config.setTokenName("Authorization");
-        config.setTokenPrefix("Bearer ");
+        config.setTokenPrefix("Bearer");
         config.setTimeout(7 * 24 * 60 * 60);
         config.setActiveTimeout(-1);
         config.setIsConcurrent(true);
@@ -64,8 +64,7 @@ public class SaTokenConfigration implements WebMvcConfigurer {
                 })
                 .setError(e -> {
                     // 异常处理
-                    log.error("SaToken 校验失败：{}", e.getMessage());
-                    throw new ServiceException("未授权");
+                    return JSON.toJSONString(GlobalExceptionHandler.toR(401, e, "未登录", true));
                 });
     }
 

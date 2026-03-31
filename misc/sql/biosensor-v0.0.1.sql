@@ -3,7 +3,7 @@ CREATE TABLE `sys_user`
 (
     `id`              bigint       NOT NULL AUTO_INCREMENT,
     `wx_mp_openid`    varchar(64)  null comment '微信小程序 openid',
-    `user_name`       varchar(30)  NOT NULL COMMENT '用户账号',
+    `user_name`       varchar(30)  NULL COMMENT '用户账号',
     `nick_name`       varchar(30)  NOT NULL COMMENT '用户昵称',
     `user_type`       varchar(2)   NULL DEFAULT '0' COMMENT '用户类型（1 管理员，0 普通用户）',
     `email`           varchar(50)  NULL DEFAULT '' COMMENT '用户邮箱',
@@ -31,6 +31,8 @@ ALTER TABLE `sys_user`
     ADD COLUMN `weight` float NULL COMMENT '体重(kg)' AFTER `height`,
     ADD COLUMN `first_measure_date` date NULL COMMENT '首次检测日期' AFTER `weight`,
     ADD COLUMN `total_measures` int NULL DEFAULT 0 COMMENT '累计检测次数' AFTER `first_measure_date`;
+
+alter table sys_user add unique index unikey(user_name,wx_mp_openid) comment '用户名或微信唯一索引';
 -- 设备信息表
 CREATE TABLE `t_device`
 (

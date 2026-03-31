@@ -1,7 +1,10 @@
 package com.miqroera.biosensor.domain.service;
 
-import com.miqroera.biosensor.domain.model.Record;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.miqroera.biosensor.domain.model.Record;
+import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,21 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRecordService extends IService<Record> {
 
+    /**
+     * 单条上报检测记录
+     *
+     * @param userId 用户 ID
+     * @param dto    上报参数
+     * @return 保存后的记录
+     */
+    Record addRecord(Long userId, RecordAddDTO dto);
+
+    /**
+     * 批量上报检测记录
+     *
+     * @param userId 用户 ID
+     * @param dtos   上报参数列表
+     * @return 保存后的记录列表
+     */
+    List<Record> batchAddRecords(Long userId, List<RecordAddDTO> dtos);
 }

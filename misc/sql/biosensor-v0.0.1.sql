@@ -24,7 +24,13 @@ CREATE TABLE `sys_user`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1 COMMENT = '用户信息表';
-
+-- 用户表扩展字段
+ALTER TABLE `sys_user`
+    ADD COLUMN `birthday` date NULL COMMENT '出生日期' AFTER `avatar`,
+    ADD COLUMN `height` float NULL COMMENT '身高(cm)' AFTER `birthday`,
+    ADD COLUMN `weight` float NULL COMMENT '体重(kg)' AFTER `height`,
+    ADD COLUMN `first_measure_date` date NULL COMMENT '首次检测日期' AFTER `weight`,
+    ADD COLUMN `total_measures` int NULL DEFAULT 0 COMMENT '累计检测次数' AFTER `first_measure_date`;
 -- 设备信息表
 CREATE TABLE `t_device`
 (
@@ -156,5 +162,26 @@ CREATE TABLE `sys_config`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
     COMMENT = '系统配置表';
+
+-- MinIO 文件上传配置表
+CREATE TABLE `sys_minio_file`
+(
+    `id`            bigint       NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+    `original_name` varchar(255) NULL DEFAULT NULL COMMENT '图片原始文件名称',
+    `suffix`        varchar(64)  NULL DEFAULT NULL COMMENT '后缀名称',
+    `bucket`        varchar(64)  NULL DEFAULT NULL COMMENT '桶名称',
+    `object`        varchar(500) NULL DEFAULT NULL COMMENT '存储地址',
+    `object_size`   bigint       NULL DEFAULT NULL COMMENT '文件大小',
+    `create_by`     varchar(64)  NULL DEFAULT '' COMMENT '创建者',
+    `create_time`   datetime     NULL DEFAULT NULL COMMENT '创建时间',
+    `update_by`     varchar(64)  NULL DEFAULT '' COMMENT '更新者',
+    `update_time`   datetime     NULL DEFAULT NULL COMMENT '更新时间',
+    `remark`        varchar(500) NULL DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_bucket` (`bucket`) USING BTREE COMMENT '桶名称索引',
+    INDEX `idx_create_time` (`create_time`) USING BTREE COMMENT '创建时间索引'
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+    COMMENT = 'MinIO 文件上传配置表';
 
 

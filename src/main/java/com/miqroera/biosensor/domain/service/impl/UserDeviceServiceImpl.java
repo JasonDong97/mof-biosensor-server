@@ -198,6 +198,17 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         return buildDeviceVO(device, userDevice.getBindTime());
     }
 
+    @Override
+    public void checkExists(Long userId, Long deviceId) {
+        boolean exists = this.lambdaQuery().eq(UserDevice::getUserId, userId)
+                .eq(UserDevice::getDeviceId, deviceId)
+                .eq(UserDevice::getIsActive, 1)
+                .exists();
+        if (!exists) {
+            throw new ServiceException("设备未绑定：{}", deviceId);
+        }
+    }
+
     /**
      * 构建 DeviceVO
      */

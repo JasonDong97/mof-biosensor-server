@@ -137,6 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         return UserInfoVO.builder()
                 .id(user.getId())
+                .openid(user.getWxMpOpenid())
                 .userName(user.getUserName())
                 .nickName(user.getNickName())
                 .avatar(user.getAvatar())

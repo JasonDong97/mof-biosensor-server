@@ -1,92 +1,240 @@
 # MiQroBreath Backend
 
+智能呼气检测仪后端系统 - 为微信小程序提供设备管理、检测数据记录及健康分析服务
 
+---
 
-## Getting started
+## 技术栈
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **JDK**: 17+
+- **框架**: Spring Boot 3.2.3
+- **ORM**: MyBatis Plus 3.5.15
+- **数据库**: MySQL 8.0+ / Redis 6.0+
+- **权限**: Sa-Token 1.45.0
+- **API 文档**: Knife4j 4.4.0
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+## 快速开始
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### 1. 环境要求
+
+- JDK 17+
+- Maven 3.6+
+- MySQL 8.0+
+- Redis 6.0+
+
+### 2. 数据库初始化
+
+```bash
+# 创建数据库
+CREATE DATABASE biosensor DEFAULT CHARACTER SET utf8mb4;
+
+# 导入表结构
+use biosensor;
+source misc/sql/biosensor-v0.0.1.sql;
+```
+
+### 3. 配置修改
+
+编辑 `src/main/resources/config/application-dev.yaml`:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/biosensor?serverTimezone=Asia/Shanghai
+    username: your_username
+    password: your_password
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: your_password
+      database: 4
+```
+
+### 4. 编译运行
+
+```bash
+# 编译
+mvn clean package -DskipTests
+
+# 运行
+mvn spring-boot:run
+# 或 java -jar target/mof-based-biosensor-0.0.1.jar
+```
+
+### 5. 访问
+
+- **服务地址**: http://localhost:9093/api
+- **API 文档**: http://localhost:9093/api/doc.html
+
+---
+
+## 项目结构
 
 ```
-cd existing_repo
-git remote add origin http://git.miqroera.com/era/platform/miqrobreath/miqrobreath-backend.git
-git branch -M master
-git push -uf origin master
+src/main/java/com/miqroera/biosensor/
+├── domain/          # 领域模型层
+│   ├── mapper/      # MyBatis Mapper
+│   ├── model/       # 实体类 (Entity/DTO/VO)
+│   └── service/     # 业务逻辑层
+├── infra/           # 基础设施层
+│   ├── config/      # 配置类
+│   ├── domain/      # 通用模型 (R 响应类)
+│   └── util/        # 工具类
+└── web/             # Controller 层
+    ├── AuthController.java      # 认证接口
+    ├── DeviceController.java    # 设备接口
+    ├── RecordController.java    # 记录接口
+    └── FeedbackController.java  # 反馈接口
 ```
 
-## Integrate with your tools
+---
 
-- [ ] [Set up project integrations](http://git.miqroera.com/era/platform/miqrobreath/miqrobreath-backend/-/settings/integrations)
+## API 接口
 
-## Collaborate with your team
+| 模块 | 前缀 | 说明 |
+|------|------|------|
+| 认证 | `/api/v1/auth` | 登录、登出、Token 刷新 |
+| 用户 | `/api/v1/user` | 用户信息查询更新 |
+| 设备 | `/api/v1/devices` | 设备绑定解绑查询 |
+| 记录 | `/api/v1/records` | 检测记录上报查询 |
+| 反馈 | `/api/v1/feedbacks` | 用户反馈提交查询 |
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### 接口示例
 
-## Test and Deploy
+**微信小程序登录**
+```http
+POST /api/v1/auth/login/wx
+{
+  "code": "微信登录 code"
+}
+```
 
-Use the built-in continuous integration in GitLab.
+**设备绑定**
+```http
+POST /api/v1/devices/bind
+Authorization: Bearer {accessToken}
+{
+  "deviceSn": "SN20260403001"
+}
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+**检测记录上报**
+```http
+POST /api/v1/records
+Authorization: Bearer {accessToken}
+{
+  "recordId": "uuid",
+  "deviceSn": "SN20260403001",
+  "concentration": 125.5,
+  "level": 2,
+  "sceneType": 1
+}
+```
 
-***
+详细文档：http://localhost:9093/api/doc.html
 
-# Editing this README
+---
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## 数据库表
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+| 表名 | 说明 |
+|------|------|
+| sys_user | 用户信息表 |
+| t_device | 设备信息表 |
+| t_user_device | 用户设备绑定关系 |
+| t_record | 检测记录表 |
+| t_feedback | 用户反馈表 |
+| sys_config | 系统配置表 |
 
-## Name
-Choose a self-explaining name for your project.
+---
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## 配置说明
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+**应用端口**: 9093  
+**Context Path**: /api  
+**日志目录**: ./logs  
+**日志保留**: 1 年
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+配置文件:
+- `application.yaml` - 主配置
+- `application-dev.yaml` - 开发环境
+- `application-knife4j.yaml` - API 文档
+- `logback-spring.xml` - 日志配置
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 常用命令
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```bash
+# 清理打包
+mvn clean package -DskipTests
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# 编译
+mvn compile
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+# 运行测试
+mvn test
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+# 代码检查
+mvn checkstyle:check
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+---
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## 常见问题
 
-## License
-For open source projects, say how it is licensed.
+**端口被占用**
+```bash
+# Windows
+netstat -ano | findstr :9093
+taskkill /F /PID <PID>
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**数据库连接失败**  
+检查 MySQL 服务、配置、防火墙
+
+**Redis 连接失败**  
+检查 Redis 服务、密码配置
+
+**Token 失效**  
+调用 `/api/v1/auth/refresh` 刷新 Token
+
+---
+
+## 开发规范
+
+- **类名**: PascalCase (如 `DeviceController`)
+- **方法/变量**: camelCase (如 `getUserById`)
+- **响应格式**: `R.ok(data)` / `R.fail(message)`
+- **日志**: `log.error()` / `log.info()` / `log.debug()`
+- **异常**: 使用 `ServiceException`
+
+---
+
+## 更新日志
+
+### v0.0.1 (2026-03-31)
+
+- ✅ 用户认证（微信登录、手机号登录）
+- ✅ 设备管理（绑定、解绑、查询）
+- ✅ 检测记录（单条上报、批量上报、分页查询）
+- ✅ 用户反馈功能
+- ✅ API 文档集成
+
+---
+
+## 联系方式
+
+- **团队**: MiQroEra 研发团队
+- **邮箱**: support@miqroera.com
+
+---
+
+<div align="center">
+
+Made with ❤️ by MiQroEra Team
+
+</div>

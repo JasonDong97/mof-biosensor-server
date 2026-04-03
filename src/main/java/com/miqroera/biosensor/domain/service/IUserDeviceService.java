@@ -52,4 +52,12 @@ public interface IUserDeviceService extends IService<UserDevice> {
      * @return 设备详情
      */
     DeviceVO getDeviceDetail(Long userId, String deviceSn);
+
+    /**
+     * 检查设备是否存在
+     *
+     * @param userId   用户 ID
+     * @param deviceId 设备 ID
+     */
+    void checkExists(Long userId, Long deviceId);
 }

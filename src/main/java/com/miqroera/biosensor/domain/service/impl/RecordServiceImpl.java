@@ -9,7 +9,10 @@ import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
+import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IRecordService;
+import com.miqroera.biosensor.domain.service.IUserDeviceService;
+import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,19 +34,25 @@ import java.util.List;
 @Service
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
 
+    private final IDeviceService deviceService;
+    private final IUserDeviceService userDeviceService;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Record addRecord(Long userId, RecordAddDTO dto) {
         log.info("上报检测记录，userId: {}, recordId: {}", userId, dto.getRecordId());
+        String deviceSn = dto.getDeviceSn();
+        // 检查设备是否绑定
+        deviceService.checkBinded(userId, deviceSn);
 
         // 1. 幂等性检查：record_id 是否已存在
-        LambdaQueryWrapper<Record> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Record::getRecordId, dto.getRecordId());
-        Record existingRecord = this.getOne(queryWrapper);
+        Record existingRecord = this.lambdaQuery()
+                .eq(Record::getRecordId, dto.getRecordId())
+                .eq(Record::getDeviceSn, dto.getDeviceSn())
+                .one();
 
         if (existingRecord != null) {
-            log.info("记录已存在，返回已有记录，recordId: {}", dto.getRecordId());
-            return existingRecord;
+            throw ServiceException.of("上报失败，重复记录：{}", dto.getRecordId());
         }
 
         // 2. 构建记录对象
@@ -125,8 +134,8 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         // 3. 转换为 VO
         List<RecordListVO> voList = CollectionUtils.isEmpty(resultPage.getRecords()) ? List.of()
                 : resultPage.getRecords().stream()
-                        .map(this::convertToVO)
-                        .toList();
+                .map(this::convertToVO)
+                .toList();
 
         Page<RecordListVO> voPage = new Page<>(query.getPageNum(), query.getPageSize(), resultPage.getTotal());
         voPage.setRecords(voList);

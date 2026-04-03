@@ -29,6 +29,12 @@ public class UserInfoVO implements Serializable {
     private Long id;
 
     /**
+     * 微信 OPENID
+     */
+    @Schema(description = "微信 OPENID")
+    private String openid;
+
+    /**
      * 用户账号
      */
     @Schema(description = "用户账号", example = "13800138000")

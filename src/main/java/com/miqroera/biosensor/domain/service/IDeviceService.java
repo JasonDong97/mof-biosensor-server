@@ -1,7 +1,7 @@
 package com.miqroera.biosensor.domain.service;
 
-import com.miqroera.biosensor.domain.model.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.miqroera.biosensor.domain.model.Device;
 
 /**
  * <p>
@@ -13,4 +13,18 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDeviceService extends IService<Device> {
 
+    /**
+     * 检查设备是否存在
+     *
+     * @param deviceSn 设备 SN
+     */
+    Device checkExists(String deviceSn);
+
+    /**
+     * 检查设备是否已绑定
+     *
+     * @param userId   用户 ID
+     * @param deviceSn 设备 SN
+     */
+    void checkBinded(Long userId, String deviceSn);
 }

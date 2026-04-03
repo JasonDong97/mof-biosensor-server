@@ -1,10 +1,13 @@
 package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordBatchDTO;
+import com.miqroera.biosensor.domain.model.dto.RecordQuery;
+import com.miqroera.biosensor.domain.model.vo.RecordListVO;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.infra.domain.model.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,10 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,5 +55,16 @@ public class RecordController {
         Long userId = StpUtil.getLoginIdAsLong();
         List<Record> records = recordService.batchAddRecords(userId, dto.getRecords());
         return R.ok(records);
+    }
+
+    /**
+     * 分页查询检测记录
+     */
+    @GetMapping
+    @Operation(summary = "分页查询检测记录", description = "分页查询当前用户的检测记录，支持时间、场景、设备筛选")
+    public R<Page<RecordListVO>> queryRecords(RecordQuery query) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        Page<RecordListVO> page = recordService.queryRecords(userId, query);
+        return R.ok(page);
     }
 }

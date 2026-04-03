@@ -3,6 +3,7 @@ package com.miqroera.biosensor.web;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
+import com.miqroera.biosensor.domain.model.dto.RefreshTokenDTO;
 import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
 import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
 import com.miqroera.biosensor.domain.service.ISysUserService;
@@ -12,7 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 认证控制器
@@ -58,8 +62,8 @@ public class AuthController {
     @SaIgnore
     @PostMapping("/refresh")
     @Operation(summary = "刷新 Token", description = "通过 refresh token 获取新的 access token")
-    public R<AuthResponseVO> refreshToken(@RequestBody String refreshToken) {
-        AuthResponseVO response = sysUserService.refreshToken(refreshToken);
+    public R<AuthResponseVO> refreshToken(@RequestBody RefreshTokenDTO refreshToken) {
+        AuthResponseVO response = sysUserService.refreshToken(refreshToken.getRefreshToken());
         return R.ok(response);
     }
 

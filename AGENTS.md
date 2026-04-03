@@ -182,15 +182,14 @@ mvn checkstyle:check
 
 ### 核心配置文件
 - `pom.xml` - Maven 项目配置
-- `.env` - 环境变量
 - `application.yml` - Spring Boot 配置
 - `mybatis-config.xml` - MyBatis 配置
 
 ### 规则文件 (Rules)
 - `.lingma/rules/code-standard.md` - 代码编写规范
 
-### 文档资源
-- `misc/docs/` - 项目文档 (数据库设计、API 文档等)
-- `README.md` - 项目说明
+### 参考文件
+- `misc/docs/` - 项目文档 (产品需求文档、接口开发进度等)
 - `logs/` - 运行日志
+- `misc/sql/` - 数据库脚本
 

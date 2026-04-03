@@ -2,15 +2,19 @@ package com.miqroera.biosensor.domain.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.RecordMapper;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
+import com.miqroera.biosensor.domain.model.dto.RecordQuery;
+import com.miqroera.biosensor.domain.model.vo.RecordListVO;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -77,6 +81,76 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
         log.info("批量检测记录上报成功，userId: {}, 新增记录数：{}", userId, recordsToAdd.size());
         return recordsToAdd;
+    }
+
+    @Override
+    public Page<RecordListVO> queryRecords(Long userId, RecordQuery query) {
+        log.info("查询检测记录，userId: {}, 查询参数：{}", userId, query);
+
+        // 1. 构建查询条件
+        LambdaQueryWrapper<Record> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Record::getUserId, userId)
+                .eq(Record::getDelFlag, "0");
+
+        // 时间范围筛选
+        if (query.getStartTime() != null) {
+            queryWrapper.ge(Record::getTimestamp, query.getStartTime());
+        }
+        if (query.getEndTime() != null) {
+            queryWrapper.le(Record::getTimestamp, query.getEndTime());
+        }
+
+        // 场景类型筛选
+        if (query.getSceneType() != null) {
+            queryWrapper.eq(Record::getSceneType, query.getSceneType());
+        }
+
+        // 设备 SN 筛选
+        if (query.getDeviceSn() != null && !query.getDeviceSn().isBlank()) {
+            queryWrapper.eq(Record::getDeviceSn, query.getDeviceSn());
+        }
+
+        // 等级筛选
+        if (query.getLevel() != null) {
+            queryWrapper.eq(Record::getLevel, query.getLevel());
+        }
+
+        // 按检测时间倒序
+        queryWrapper.orderByDesc(Record::getTimestamp);
+
+        // 2. 分页查询
+        Page<Record> page = new Page<>(query.getPageNum(), query.getPageSize());
+        Page<Record> resultPage = this.page(page, queryWrapper);
+
+        // 3. 转换为 VO
+        List<RecordListVO> voList = CollectionUtils.isEmpty(resultPage.getRecords()) ? List.of()
+                : resultPage.getRecords().stream()
+                        .map(this::convertToVO)
+                        .toList();
+
+        Page<RecordListVO> voPage = new Page<>(query.getPageNum(), query.getPageSize(), resultPage.getTotal());
+        voPage.setRecords(voList);
+
+        log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, voList.size());
+        return voPage;
+    }
+
+    /**
+     * 转换为 VO
+     */
+    private RecordListVO convertToVO(Record record) {
+        return RecordListVO.builder()
+                .id(record.getId())
+                .recordId(record.getRecordId())
+                .deviceSn(record.getDeviceSn())
+                .timestamp(record.getTimestamp())
+                .sceneType(record.getSceneType())
+                .concentration(record.getConcentration())
+                .level(record.getLevel())
+                .levelLabel(record.getLevelLabel())
+                .suggestion(record.getSuggestion())
+                .createTime(record.getCreateTime())
+                .build();
     }
 
     /**

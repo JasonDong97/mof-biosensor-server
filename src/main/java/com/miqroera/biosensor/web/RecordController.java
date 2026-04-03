@@ -2,7 +2,7 @@ package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordBatchDTO;
@@ -26,8 +26,8 @@ import java.util.List;
  * @since 2026-03-31
  */
 @Slf4j
-@Tag(name = "检测记录管理", description = "检测记录上报、查询")
-@ApiSort(value = 4)
+@Tag(name = "检测记录", description = "检测记录上报、查询")
+@ApiSupport(order = 5)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/records")

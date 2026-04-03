@@ -1,7 +1,7 @@
 package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
@@ -24,8 +24,8 @@ import java.util.List;
  * @since 2026-03-31
  */
 @Slf4j
-@Tag(name = "设备管理", description = "设备绑定、解绑、查询")
-@ApiSort(value = 3)
+@Tag(name = "设备", description = "设备绑定、解绑、查询")
+@ApiSupport(order = 4)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/devices")

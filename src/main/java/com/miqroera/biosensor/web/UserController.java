@@ -1,7 +1,7 @@
 package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.dto.UserProfileUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
 import com.miqroera.biosensor.domain.service.ISysUserService;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2026-03-27
  */
 @Slf4j
-@Tag(name = "用户管理", description = "用户信息获取与更新")
-@ApiSort(value = 1)
+@Tag(name = "用户", description = "用户信息获取与更新")
+@ApiSupport(order = 2)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/user")

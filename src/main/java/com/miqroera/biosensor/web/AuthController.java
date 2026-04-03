@@ -1,7 +1,6 @@
 package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.annotation.SaIgnore;
-import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.miqroera.biosensor.domain.model.dto.PhoneLoginDTO;
 import com.miqroera.biosensor.domain.model.dto.RefreshTokenDTO;
 import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
@@ -25,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2026-03-26
  */
 @Slf4j
-@Tag(name = "认证管理", description = "登录、登出、Token 刷新")
-@ApiSort(value = 2)
+@Tag(name = "认证", description = "登录、登出、Token 刷新")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/auth")

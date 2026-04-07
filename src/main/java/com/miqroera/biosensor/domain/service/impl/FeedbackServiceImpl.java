@@ -10,6 +10,7 @@ import com.miqroera.biosensor.domain.model.Feedback;
 import com.miqroera.biosensor.domain.model.dto.FeedbackCreateDTO;
 import com.miqroera.biosensor.domain.model.vo.FeedbackVO;
 import com.miqroera.biosensor.domain.service.IFeedbackService;
+import com.miqroera.biosensor.infra.domain.model.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
     }
 
     @Override
-    public Page<FeedbackVO> getUserFeedbacks(Long userId, Integer current, Integer size) {
+    public PageResult<FeedbackVO> getUserFeedbacks(Long userId, Integer current, Integer size) {
         // 默认分页参数
         if (current == null || current < 1) {
             current = 1;
@@ -72,14 +73,8 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
         
         Page<Feedback> resultPage = page(page, wrapper);
         
-        // 转换为 VO
-        List<FeedbackVO> voList = resultPage.getRecords().stream()
-                .map(this::convertToVO)
-                .toList();
-        
-        Page<FeedbackVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());
-        voPage.setRecords(voList);
-        return voPage;
+        // 转换为 PageResult
+        return PageResult.build(resultPage, FeedbackVO.class);
     }
 
     @Override

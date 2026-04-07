@@ -13,11 +13,11 @@ import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
+import com.miqroera.biosensor.infra.domain.model.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -93,7 +93,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     @Override
-    public Page<RecordListVO> queryRecords(Long userId, RecordQuery query) {
+    public PageResult<RecordListVO> queryRecords(Long userId, RecordQuery query) {
         log.info("查询检测记录，userId: {}, 查询参数：{}", userId, query);
 
         // 1. 构建查询条件
@@ -131,17 +131,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         Page<Record> page = new Page<>(query.getPageNum(), query.getPageSize());
         Page<Record> resultPage = this.page(page, queryWrapper);
 
-        // 3. 转换为 VO
-        List<RecordListVO> voList = CollectionUtils.isEmpty(resultPage.getRecords()) ? List.of()
-                : resultPage.getRecords().stream()
-                .map(this::convertToVO)
-                .toList();
-
-        Page<RecordListVO> voPage = new Page<>(query.getPageNum(), query.getPageSize(), resultPage.getTotal());
-        voPage.setRecords(voList);
-
-        log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, voList.size());
-        return voPage;
+        // 3. 转换为 PageResult
+        log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, resultPage.getRecords().size());
+        return PageResult.build(resultPage, RecordListVO.class);
     }
 
     /**

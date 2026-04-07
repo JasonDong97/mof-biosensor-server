@@ -1,11 +1,11 @@
 package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.dto.FeedbackCreateDTO;
 import com.miqroera.biosensor.domain.model.vo.FeedbackVO;
 import com.miqroera.biosensor.domain.service.IFeedbackService;
+import com.miqroera.biosensor.infra.domain.model.PageResult;
 import com.miqroera.biosensor.infra.domain.model.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,12 +46,11 @@ public class FeedbackController {
      */
     @GetMapping
     @Operation(summary = "获取用户反馈列表", description = "分页获取当前用户的反馈列表")
-    public R<Page<FeedbackVO>> getFeedbackList(
+    public R<PageResult<FeedbackVO>> getFeedbackList(
             @RequestParam(defaultValue = "1") Integer current,
             @RequestParam(defaultValue = "10") Integer size) {
         Long userId = StpUtil.getLoginIdAsLong();
-        Page<FeedbackVO> page = feedbackService.getUserFeedbacks(userId, current, size);
-        return R.ok(page);
+        return R.ok(feedbackService.getUserFeedbacks(userId, current, size));
     }
 
     /**

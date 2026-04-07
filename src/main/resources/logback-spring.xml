@@ -88,23 +88,23 @@
         </root>
         
         <!-- 业务日志 -->
-        <logger name="com.miqroera.biosensor" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="SYS_INFO"/>
-            <appender-ref ref="SYS_ERROR"/>
-        </logger>
+<!--        <logger name="com.miqroera.biosensor" level="DEBUG" additivity="false">-->
+<!--            <appender-ref ref="CONSOLE"/>-->
+<!--            <appender-ref ref="SYS_INFO"/>-->
+<!--            <appender-ref ref="SYS_ERROR"/>-->
+<!--        </logger>-->
         
         <!-- SQL 日志输出 -->
-        <logger name="org.springframework.jdbc.core" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="SYS_INFO"/>
-        </logger>
+<!--        <logger name="org.springframework.jdbc.core" level="DEBUG" additivity="false">-->
+<!--            <appender-ref ref="CONSOLE"/>-->
+<!--            <appender-ref ref="SYS_INFO"/>-->
+<!--        </logger>-->
         
         <!-- MyBatis Plus SQL 日志 -->
-        <logger name="com.baomidou.mybatisplus.core" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="SYS_INFO"/>
-        </logger>
+<!--        <logger name="com.baomidou.mybatisplus.core" level="DEBUG" additivity="false">-->
+<!--            <appender-ref ref="CONSOLE"/>-->
+<!--            <appender-ref ref="SYS_INFO"/>-->
+<!--        </logger>-->
     </springProfile>
 
     <!-- 生产环境配置 -->

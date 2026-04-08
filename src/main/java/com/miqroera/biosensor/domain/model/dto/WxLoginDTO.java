@@ -3,6 +3,7 @@ package com.miqroera.biosensor.domain.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -43,5 +44,10 @@ public class WxLoginDTO implements Serializable {
      * 用户性别（可选，首次注册时使用，0-未知 1-男 2-女）
      */
     @Schema(description = "用户性别（0-未知 1-男 2-女）", example = "1")
+    @Range(min = 0, max = 2)
     private Integer gender;
+
+
+    @Schema(description = "用户手机号", example = "13800000000")
+    private String phonenumber ;
 }

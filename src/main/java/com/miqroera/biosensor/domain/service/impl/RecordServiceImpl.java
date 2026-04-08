@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.RecordMapper;
+import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
     private final IDeviceService deviceService;
     private final IUserDeviceService userDeviceService;
+    private final SysUserMapper sysUserMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -60,6 +63,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
         // 3. 保存记录
         this.save(record);
+
+        // 4. 原子更新用户首次检测日期和累计次数
+        updateUserMeasureInfo(userId, dto.getTimestamp());
 
         log.info("检测记录上报成功，userId: {}, recordId: {}", userId, dto.getRecordId());
         return record;
@@ -152,6 +158,14 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
                 .suggestion(record.getSuggestion())
                 .createTime(record.getCreateTime())
                 .build();
+    }
+
+    /**
+     * 原子更新用户检测信息（首次检测日期和累计次数）
+     */
+    private void updateUserMeasureInfo(Long userId, LocalDateTime measureTime) {
+        sysUserMapper.updateUserMeasureInfo(userId, measureTime.toLocalDate());
+        log.debug("用户检测信息更新成功，userId: {}, measureTime: {}", userId, measureTime);
     }
 
     /**

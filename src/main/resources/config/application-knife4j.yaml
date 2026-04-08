@@ -10,8 +10,12 @@ springdoc:
     operations-sorter: order
   group-configs:
     - group: 'default'
-      paths-to-match: '/v1/**'
       packages-to-scan: com.miqroera.biosensor.web
+      packages-to-exclude:
+        - com.miqroera.biosensor.web.admin
+    - group: "admin"
+      packages-to-scan:
+        - com.miqroera.biosensor.web.admin
 # knife4j 的增强配置
 knife4j:
   enable: true

@@ -6,6 +6,7 @@ import com.miqroera.biosensor.domain.mapper.DeviceMapper;
 import com.miqroera.biosensor.domain.mapper.UserDeviceMapper;
 import com.miqroera.biosensor.domain.model.Device;
 import com.miqroera.biosensor.domain.model.UserDevice;
+import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
@@ -207,6 +208,45 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         if (!exists) {
             throw new ServiceException("设备未绑定：{}", deviceId);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public DeviceVO addDevice(DeviceAddDTO dto) {
+        log.info("管理员添加设备，deviceSn: {}", dto.getDeviceSn());
+
+        // 1. 检查设备 SN 是否已存在
+        LambdaQueryWrapper<Device> query = new LambdaQueryWrapper<>();
+        query.eq(Device::getDeviceSn, dto.getDeviceSn());
+        Device existingDevice = deviceMapper.selectOne(query);
+
+        if (existingDevice != null) {
+            throw new ServiceException("设备 SN 已存在");
+        }
+
+        // 2. 创建新设备
+        Device device = new Device();
+        device.setDeviceSn(dto.getDeviceSn());
+        device.setMac(dto.getMac());
+        device.setFirmwareVersion(dto.getFirmwareVersion());
+        device.setHardwareVersion(dto.getHardwareVersion());
+        device.setBatchNo(dto.getBatchNo());
+        device.setStatus("0"); // 正常状态
+        device.setRemark(dto.getRemark());
+        deviceMapper.insert(device);
+
+        log.info("管理员添加设备成功，deviceId: {}, deviceSn: {}", device.getId(), dto.getDeviceSn());
+
+        // 3. 返回设备信息
+        return DeviceVO.builder()
+                .id(device.getId())
+                .deviceSn(device.getDeviceSn())
+                .mac(device.getMac())
+                .firmwareVersion(device.getFirmwareVersion())
+                .hardwareVersion(device.getHardwareVersion())
+                .batchNo(device.getBatchNo())
+                .status(device.getStatus())
+                .build();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.miqroera.biosensor.domain.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.miqroera.biosensor.domain.model.UserDevice;
+import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
@@ -60,4 +61,12 @@ public interface IUserDeviceService extends IService<UserDevice> {
      * @param deviceId 设备 ID
      */
     void checkExists(Long userId, Long deviceId);
+
+    /**
+     * 管理员添加设备
+     *
+     * @param dto 设备添加请求参数
+     * @return 设备信息
+     */
+    DeviceVO addDevice(DeviceAddDTO dto);
 }

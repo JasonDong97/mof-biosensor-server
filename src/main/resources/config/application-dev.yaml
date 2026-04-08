@@ -27,4 +27,4 @@ spring:
       host: 10.36.160.33
       port: 31105
       password: 'psQ!4Tr$!qSzk@'
-      database: 4
+      database: 5

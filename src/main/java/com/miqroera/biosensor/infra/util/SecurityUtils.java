@@ -1,11 +1,16 @@
+
 package com.miqroera.biosensor.infra.util;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.miqroera.biosensor.domain.service.ISysUserService;
 import com.miqroera.biosensor.infra.domain.model.LoginUser;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
@@ -21,9 +26,18 @@ import java.util.function.Function;
  *
  * @author Lion Li
  */
+@Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class SecurityUtils {
+
+    @Autowired
+    private ISysUserService userService;
+
+    @PostConstruct
+    public void init() {
+        SecurityUtils.getLoginUser = userId -> userService.getLoginUserById(Long.valueOf(userId.toString()));
+    }
 
     public static final Long SUPER_ADMIN_ID = 1L;
     public static Function<Object, LoginUser> getLoginUser;

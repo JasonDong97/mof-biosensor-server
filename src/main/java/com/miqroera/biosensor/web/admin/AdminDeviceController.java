@@ -1,6 +1,7 @@
 package com.miqroera.biosensor.web.admin;
 
 import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
+import com.miqroera.biosensor.domain.model.dto.DeviceUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
@@ -11,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 管理端设备控制器
@@ -43,6 +41,21 @@ public class AdminDeviceController {
         }
 
         DeviceVO deviceVO = userDeviceService.addDevice(dto);
+        return R.ok(deviceVO);
+    }
+
+    /**
+     * 修改设备信息
+     */
+    @PutMapping("/{deviceId}")
+    @Operation(summary = "修改设备信息", description = "管理员修改设备信息（MAC、版本、状态等）")
+    public R<DeviceVO> updateDevice(@PathVariable Long deviceId, @Valid @RequestBody DeviceUpdateDTO dto) {
+        // 权限校验：只允许 userId=1 或 userType=1 的用户操作
+        if (!SecurityUtils.isSuperAdmin() && SecurityUtils.getLoginUser().getUserType() != 1) {
+            throw new ServiceException("无权操作");
+        }
+
+        DeviceVO deviceVO = userDeviceService.updateDevice(deviceId, dto);
         return R.ok(deviceVO);
     }
 }

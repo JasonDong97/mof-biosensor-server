@@ -9,6 +9,7 @@ import com.miqroera.biosensor.domain.model.UserDevice;
 import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
+import com.miqroera.biosensor.domain.model.dto.DeviceUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
@@ -48,13 +49,8 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         Device device = deviceMapper.selectOne(deviceQuery);
 
         if (device == null) {
-            // 设备不存在，自动注册新设备
-            device = new Device();
-            device.setDeviceSn(dto.getDeviceSn());
-            device.setStatus("0"); // 正常状态
-            device.setActivatedAt(LocalDateTime.now()); // 激活时间为首次绑定时间
-            deviceMapper.insert(device);
-            log.info("自动注册新设备，deviceId: {}, deviceSn: {}", device.getId(), dto.getDeviceSn());
+            throw new ServiceException("设备不存在");
+            // 如需自动注册，调用：device = autoRegisterDevice(dto.getDeviceSn());
         }
 
         // 2. 检查设备状态
@@ -63,10 +59,10 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         }
 
         // 3. 检查是否已被其他用户绑定
-        LambdaQueryWrapper<UserDevice> bindQuery = new LambdaQueryWrapper<>();
-        bindQuery.eq(UserDevice::getDeviceId, device.getId());
-        bindQuery.eq(UserDevice::getIsActive, (byte) 1);
-        UserDevice existingBind = this.getOne(bindQuery);
+        UserDevice existingBind = this.lambdaQuery()
+                .eq(UserDevice::getDeviceId, device.getId())
+                .eq(UserDevice::getIsActive, (byte) 1)
+                .one();
 
         if (existingBind != null) {
             if (!existingBind.getUserId().equals(userId)) {
@@ -84,11 +80,10 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         userDevice.setIsActive((byte) 1);
         this.save(userDevice);
 
-        // 5. 更新设备激活时间和使用次数
-        if (device.getActivatedAt() == null) {
-            device.setActivatedAt(LocalDateTime.now());
-        }
-        deviceMapper.updateById(device);
+        // 5. 更新设备激活时间（仅在首次绑定时更新）
+        LocalDateTime activatedAt = LocalDateTime.now();
+        deviceMapper.updateActivatedAt(device.getId(), activatedAt);
+        device.setActivatedAt(activatedAt);
 
         log.info("设备绑定成功，userId: {}, deviceSn: {}", userId, dto.getDeviceSn());
         return buildDeviceVO(device, userDevice.getBindTime());
@@ -247,6 +242,57 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
                 .batchNo(device.getBatchNo())
                 .status(device.getStatus())
                 .build();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public DeviceVO updateDevice(Long deviceId, DeviceUpdateDTO dto) {
+        log.info("管理员修改设备信息，deviceId: {}", deviceId);
+
+        // 1. 查询设备是否存在
+        Device device = deviceMapper.selectById(deviceId);
+        if (device == null) {
+            throw new ServiceException("设备不存在");
+        }
+
+        // 2. 更新设备信息（只更新传入的字段）
+        device.setMac(dto.getMac());
+        device.setFirmwareVersion(dto.getFirmwareVersion());
+        device.setHardwareVersion(dto.getHardwareVersion());
+        device.setBatchNo(dto.getBatchNo());
+        device.setStatus(dto.getStatus());
+        device.setRemark(dto.getRemark());
+        deviceMapper.updateById(device);
+
+        log.info("管理员修改设备信息成功，deviceId: {}", deviceId);
+
+        // 3. 返回更新后的设备信息
+        return DeviceVO.builder()
+                .id(device.getId())
+                .deviceSn(device.getDeviceSn())
+                .mac(device.getMac())
+                .firmwareVersion(device.getFirmwareVersion())
+                .hardwareVersion(device.getHardwareVersion())
+                .batchNo(device.getBatchNo())
+                .status(device.getStatus())
+                .build();
+    }
+
+    /**
+     * 自动注册新设备（保留待用）
+     * 当设备 SN 不存在时，自动创建新设备记录
+     *
+     * @param deviceSn 设备 SN
+     * @return 注册后的设备对象
+     */
+    private Device autoRegisterDevice(String deviceSn) {
+        Device device = new Device();
+        device.setDeviceSn(deviceSn);
+        device.setStatus("0"); // 正常状态
+        device.setActivatedAt(LocalDateTime.now()); // 激活时间为首次绑定时间
+        deviceMapper.insert(device);
+        log.info("自动注册新设备，deviceId: {}, deviceSn: {}", device.getId(), deviceSn);
+        return device;
     }
 
     /**

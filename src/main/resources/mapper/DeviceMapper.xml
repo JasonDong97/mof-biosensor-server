@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.miqroera.biosensor.domain.mapper.DeviceMapper">
 
+    <!-- 更新设备激活时间（仅在 activated_at 为 NULL 时更新） -->
+    <update id="updateActivatedAt">
+        UPDATE t_device
+        SET activated_at = #{activatedAt}
+        WHERE id = #{deviceId}
+        AND activated_at IS NULL
+    </update>
+
+    <!-- 更新设备使用信息（最后使用时间和累计次数） -->
+    <update id="updateDeviceUsage">
+        UPDATE t_device
+        SET last_used_at = #{lastUsedAt},
+            total_uses = COALESCE(total_uses, 0) + 1
+        WHERE device_sn = #{deviceSn}
+    </update>
+
 </mapper>

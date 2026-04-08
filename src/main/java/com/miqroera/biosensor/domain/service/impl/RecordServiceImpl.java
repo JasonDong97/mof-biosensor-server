@@ -39,6 +39,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private final IDeviceService deviceService;
     private final IUserDeviceService userDeviceService;
     private final SysUserMapper sysUserMapper;
+    private final com.miqroera.biosensor.domain.mapper.DeviceMapper deviceMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -66,6 +67,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
         // 4. 原子更新用户首次检测日期和累计次数
         updateUserMeasureInfo(userId, dto.getTimestamp());
+
+        // 5. 更新设备使用信息（最后使用时间和累计次数）
+        updateDeviceUsage(deviceSn, dto.getTimestamp());
 
         log.info("检测记录上报成功，userId: {}, recordId: {}", userId, dto.getRecordId());
         return record;
@@ -166,6 +170,14 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private void updateUserMeasureInfo(Long userId, LocalDateTime measureTime) {
         sysUserMapper.updateUserMeasureInfo(userId, measureTime.toLocalDate());
         log.debug("用户检测信息更新成功，userId: {}, measureTime: {}", userId, measureTime);
+    }
+
+    /**
+     * 更新设备使用信息（最后使用时间和累计次数）
+     */
+    private void updateDeviceUsage(String deviceSn, LocalDateTime useTime) {
+        deviceMapper.updateDeviceUsage(deviceSn, useTime);
+        log.debug("设备使用信息更新成功，deviceSn: {}, useTime: {}", deviceSn, useTime);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.miqroera.biosensor.domain.model.UserDevice;
 import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
+import com.miqroera.biosensor.domain.model.dto.DeviceUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 
@@ -69,4 +70,13 @@ public interface IUserDeviceService extends IService<UserDevice> {
      * @return 设备信息
      */
     DeviceVO addDevice(DeviceAddDTO dto);
+
+    /**
+     * 管理员修改设备信息
+     *
+     * @param deviceId 设备 ID
+     * @param dto      设备修改请求参数
+     * @return 更新后的设备信息
+     */
+    DeviceVO updateDevice(Long deviceId, DeviceUpdateDTO dto);
 }

@@ -72,7 +72,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AuthResponseVO phoneLogin(PhoneLoginDTO dto) {
@@ -251,10 +250,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 根据手机号查询或创建用户
      */
     private SysUser getOrCreateUserByPhone(String phone) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getPhonenumber, phone);
-        SysUser user = getOne(queryWrapper);
-
+        SysUser user = this.lambdaQuery().eq(SysUser::getPhonenumber, phone).one();
         if (user == null) {
             // 创建新用户
             user = new SysUser();

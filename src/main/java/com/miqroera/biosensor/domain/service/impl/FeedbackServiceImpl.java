@@ -10,6 +10,7 @@ import com.miqroera.biosensor.domain.model.Feedback;
 import com.miqroera.biosensor.domain.model.dto.FeedbackCreateDTO;
 import com.miqroera.biosensor.domain.model.vo.FeedbackVO;
 import com.miqroera.biosensor.domain.service.IFeedbackService;
+import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,11 +82,11 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback> i
     public FeedbackVO getFeedbackDetail(Long userId, Long id) {
         Feedback feedback = getById(id);
         if (feedback == null) {
-            throw new RuntimeException("反馈记录不存在");
+            throw new ServiceException("反馈记录不存在");
         }
         // 校验是否属于当前用户
         if (!feedback.getUserId().equals(userId)) {
-            throw new RuntimeException("无权查看该反馈");
+            throw new ServiceException("无权查看该反馈");
         }
         return convertToVO(feedback);
     }

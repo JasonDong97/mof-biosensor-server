@@ -5,6 +5,8 @@ import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
+import com.miqroera.biosensor.domain.model.vo.SummaryVO;
+import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 
 import java.util.List;
@@ -45,4 +47,23 @@ public interface IRecordService extends IService<Record> {
      * @return 分页记录列表
      */
     PageResult<RecordListVO> queryRecords(Long userId, RecordQuery query);
+
+    /**
+     * 获取趋势数据（折线图）
+     *
+     * @param userId   用户 ID
+     * @param type     筛选类型：week 按周, day 按天
+     * @param deviceSn 设备SN，不传则查用户所有设备
+     * @return 趋势数据
+     */
+    TrendDataVO getTrendData(Long userId, String type, String deviceSn);
+
+    /**
+     * 获取统计摘要
+     *
+     * @param userId   用户 ID
+     * @param deviceSn 设备SN，不传则查用户所有设备
+     * @return 统计摘要
+     */
+    SummaryVO getSummary(Long userId, String deviceSn);
 }

@@ -7,6 +7,8 @@ import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordBatchDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
+import com.miqroera.biosensor.domain.model.vo.SummaryVO;
+import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 import com.miqroera.biosensor.infra.domain.model.R;
@@ -65,5 +67,27 @@ public class RecordController {
     public R<PageResult<RecordListVO>> queryRecords(RecordQuery query) {
         Long userId = StpUtil.getLoginIdAsLong();
         return R.ok(recordService.queryRecords(userId, query));
+    }
+
+    /**
+     * 获取趋势数据（折线图）
+     */
+    @GetMapping("/stats/trend")
+    @Operation(summary = "获取趋势数据", description = "获取本周与上周的每日浓度数据对比")
+    public R<TrendDataVO> getTrendData(
+            @RequestParam(defaultValue = "week") String type,
+            @RequestParam(required = false) String deviceSn) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        return R.ok(recordService.getTrendData(userId, type, deviceSn));
+    }
+
+    /**
+     * 获取统计摘要
+     */
+    @GetMapping("/stats/summary")
+    @Operation(summary = "获取统计摘要", description = "获取本周平均浓度及对比上周变化")
+    public R<SummaryVO> getSummary(@RequestParam(required = false) String deviceSn) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        return R.ok(recordService.getSummary(userId, deviceSn));
     }
 }

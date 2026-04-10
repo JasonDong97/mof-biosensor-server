@@ -9,7 +9,10 @@ import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
+import com.miqroera.biosensor.domain.model.vo.DailyValueVO;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
+import com.miqroera.biosensor.domain.model.vo.SummaryVO;
+import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
 import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
@@ -20,8 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -40,6 +51,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     private final IUserDeviceService userDeviceService;
     private final SysUserMapper sysUserMapper;
     private final com.miqroera.biosensor.domain.mapper.DeviceMapper deviceMapper;
+    private final RecordMapper recordMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -144,6 +156,130 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         // 3. 转换为 PageResult
         log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, resultPage.getRecords().size());
         return PageResult.build(resultPage, RecordListVO.class);
+    }
+
+    @Override
+    public TrendDataVO getTrendData(Long userId, String type, String deviceSn) {
+        log.info("获取趋势数据，userId: {}, type: {}, deviceSn: {}", userId, type, deviceSn);
+
+        // 计算本周和上周的日期范围
+        LocalDate today = LocalDate.now();
+        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate lastWeekStart = weekStart.minusWeeks(1);
+
+        // 查询本周数据
+        List<DailyValueVO> thisWeekData = getDailyAverages(userId, deviceSn, lastWeekStart, weekStart);
+
+        // 查询上周数据
+        List<DailyValueVO> lastWeekData = getDailyAverages(userId, deviceSn, lastWeekStart.minusWeeks(1), lastWeekStart);
+
+        return TrendDataVO.builder()
+                .thisWeek(thisWeekData)
+                .lastWeek(lastWeekData)
+                .build();
+    }
+
+    @Override
+    public SummaryVO getSummary(Long userId, String deviceSn) {
+        log.info("获取统计摘要，userId: {}, deviceSn: {}", userId, deviceSn);
+
+        LocalDate today = LocalDate.now();
+        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate lastWeekStart = weekStart.minusWeeks(1);
+
+        // 本周平均
+        double thisWeekAvg = getAverageConcentration(userId, deviceSn, lastWeekStart, weekStart);
+
+        // 上周平均
+        double lastWeekAvg = getAverageConcentration(userId, deviceSn, lastWeekStart.minusWeeks(1), lastWeekStart);
+
+        // 计算变化百分比
+        int changePercent = 0;
+        String trend = "flat";
+        if (lastWeekAvg > 0) {
+            changePercent = BigDecimal.valueOf((thisWeekAvg - lastWeekAvg) / lastWeekAvg * 100)
+                    .setScale(0, RoundingMode.HALF_UP).intValue();
+            if (changePercent > 0) {
+                trend = "up";
+            } else if (changePercent < 0) {
+                trend = "down";
+            }
+        }
+
+        return SummaryVO.builder()
+                .thisWeekAvg((double) Math.round(thisWeekAvg))
+                .lastWeekAvg((double) Math.round(lastWeekAvg))
+                .changePercent(changePercent)
+                .trend(trend)
+                .build();
+    }
+
+    /**
+     * 获取指定日期范围内每天的平均浓度
+     */
+    private List<DailyValueVO> getDailyAverages(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
+        List<Record> records = getAverage(userId, deviceSn, startDate, endDate);
+
+        // 按日期分组计算平均值
+        Map<LocalDate, List<Record>> byDate = records.stream()
+                .collect(Collectors.groupingBy(r -> r.getTimestamp().toLocalDate()));
+
+        List<DailyValueVO> result = new ArrayList<>();
+        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+            List<Record> dayRecords = byDate.get(date);
+            Double avg = null;
+            if (dayRecords != null && !dayRecords.isEmpty()) {
+                OptionalDouble optAvg = dayRecords.stream()
+                        .map(Record::getConcentration)
+                        .filter(Objects::nonNull)
+                        .mapToDouble(Double::doubleValue)
+                        .average();
+                avg = optAvg.isPresent() ? optAvg.getAsDouble() : null;
+            }
+            final Double finalAvg = avg;
+            result.add(DailyValueVO.builder()
+                    .date(date.toString())
+                    .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.CHINA))
+                    .value(finalAvg != null ? (double) Math.round(finalAvg) : 0.0)
+                    .build());
+        }
+
+        return result;
+    }
+
+    private List<Record> getAverage(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
+        LocalDateTime start = startDate.atStartOfDay();
+        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+
+        LambdaQueryWrapper<Record> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Record::getUserId, userId)
+                .eq(Record::getDelFlag, "0")
+                .ge(Record::getTimestamp, start)
+                .lt(Record::getTimestamp, end)
+                .isNotNull(Record::getConcentration);
+
+        if (deviceSn != null && !deviceSn.isBlank()) {
+            queryWrapper.eq(Record::getDeviceSn, deviceSn);
+        }
+
+        return this.list(queryWrapper);
+    }
+
+    /**
+     * 获取指定日期范围内的平均浓度
+     */
+    private Double getAverageConcentration(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
+        List<Record> records = getAverage(userId, deviceSn, startDate, endDate);
+        if (records.isEmpty()) {
+            return 0.0;
+        }
+
+        return records.stream()
+                .map(Record::getConcentration)
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
+                .average()
+                .orElse(0.0);
     }
 
     /**

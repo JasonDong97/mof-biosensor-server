@@ -26,6 +26,7 @@
         <fastjson.version>2.0.61</fastjson.version>
         <sa-token.version>1.45.0</sa-token.version>
         <knife4j.version>4.4.0</knife4j.version>
+        <minio.version>7.1.4</minio.version>
     </properties>
 
     <dependencyManagement>
@@ -137,7 +138,12 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <!--minio-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

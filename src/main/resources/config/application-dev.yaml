@@ -28,3 +28,11 @@ spring:
       port: 31105
       password: 'psQ!4Tr$!qSzk@'
       database: 5
+      
+minio:
+  url: http://10.36.160.33:31102
+  # url: http://139.196.211.120:6850
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: miqrobreath
+  

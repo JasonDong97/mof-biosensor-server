@@ -49,13 +49,19 @@ public class GlobalExceptionHandler {
 
     // ==================== 常量定义 ====================
 
-    /** 系统错误码 */
+    /**
+     * 系统错误码
+     */
     private static final int SYSTEM_ERROR_CODE = 500;
 
-    /** JSON 内容类型 */
+    /**
+     * JSON 内容类型
+     */
     private static final String JSON_CONTENT_TYPE = "application/json;charset=UTF-8";
 
-    /** 未知路径标识 */
+    /**
+     * 未知路径标识
+     */
     private static final String UNKNOWN_PATH = "unknown";
 
     // ==================== 工具方法 ====================
@@ -70,9 +76,9 @@ public class GlobalExceptionHandler {
     /**
      * 构建异常响应对象（静态方法，供外部调用）
      *
-     * @param code 错误码
-     * @param e 异常对象
-     * @param msg 错误消息
+     * @param code            错误码
+     * @param e               异常对象
+     * @param msg             错误消息
      * @param printStackTrace 是否打印堆栈
      * @return 统一响应对象
      */
@@ -126,7 +132,7 @@ public class GlobalExceptionHandler {
     /**
      * 构建异常响应对象
      *
-     * @param e 异常对象
+     * @param e            异常对象
      * @param errorMessage 错误消息
      * @return 统一响应对象
      */
@@ -137,8 +143,8 @@ public class GlobalExceptionHandler {
     /**
      * 构建异常响应对象
      *
-     * @param e 异常对象
-     * @param errorType 错误类型
+     * @param e               异常对象
+     * @param errorType       错误类型
      * @param printStackTrace 是否打印堆栈
      * @return 统一响应对象
      */
@@ -149,9 +155,9 @@ public class GlobalExceptionHandler {
     /**
      * 构建异常响应对象
      *
-     * @param code 错误码
-     * @param e 异常对象
-     * @param errorMessage 错误消息
+     * @param code            错误码
+     * @param e               异常对象
+     * @param errorMessage    错误消息
      * @param printStackTrace 是否打印堆栈
      * @return 统一响应对象
      */
@@ -176,12 +182,12 @@ public class GlobalExceptionHandler {
     /**
      * 记录异常日志
      *
-     * @param request HTTP 请求
-     * @param message 错误消息
+     * @param request    HTTP 请求
+     * @param message    错误消息
      * @param stackTrace 堆栈信息
      */
     private static void logException(HttpServletRequest request, String message, String stackTrace) {
-        log.error("[{}][{}] {} - {}{}",
+        log.error("[{}][{}] {} - {} {}{}",
                 ServletUtils.getClientIP(),
                 SecurityUtils.getNickName(),
                 request.getMethod(),
@@ -201,6 +207,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public R<?> handleException(Exception e) {
         setJsonContentType();
+        log.error("", e);
         return buildErrorResponse(e);
     }
 
@@ -289,10 +296,10 @@ public class GlobalExceptionHandler {
     public R<JSONObject> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         ObjectError firstError = allErrors.isEmpty() ? null : allErrors.get(0);
-        
+
         String defaultMessage = firstError != null ? firstError.getDefaultMessage() : e.getMessage();
         R<JSONObject> response = R.fail(defaultMessage);
-        
+
         if (!(firstError instanceof FieldError fieldError)) {
             return response;
         }
@@ -300,16 +307,16 @@ public class GlobalExceptionHandler {
         String field = fieldError.getField();
         Object rejectedValue = fieldError.getRejectedValue();
         String fieldErrorMessage = fieldError.getDefaultMessage();
-        
+
         // 构建详细的参数错误信息
         String detailedMessage = buildFieldErrorMessage(field, fieldErrorMessage, rejectedValue);
         JSONObject data = new JSONObject();
         data.put(field, rejectedValue);
-        
+
         response.setMsg(detailedMessage);
         response.setData(data);
-        
-        log.warn("参数校验失败 - 路径：{}, 错误：{}, 数据：{}", 
+
+        log.warn("参数校验失败 - 路径：{}, 错误：{}, 数据：{}",
                 getRequestPath(), detailedMessage, data);
         return response;
     }
@@ -317,9 +324,9 @@ public class GlobalExceptionHandler {
     /**
      * 构建字段错误消息
      *
-     * @param field 字段名
+     * @param field          字段名
      * @param defaultMessage 默认错误消息
-     * @param rejectedValue 被拒绝的值
+     * @param rejectedValue  被拒绝的值
      * @return 格式化后的错误消息
      */
     private String buildFieldErrorMessage(String field, String defaultMessage, Object rejectedValue) {
@@ -339,7 +346,7 @@ public class GlobalExceptionHandler {
         String expectedType = e.getRequiredType() != null ? e.getRequiredType().getSimpleName() : "未知";
         String actualType = e.getValue() != null ? e.getValue().getClass().getSimpleName() : "未知";
         String value = String.valueOf(e.getValue());
-        
+
         String message = StrUtil.format("参数 '{}' 期望类型为 {}, 但接收的类型为 '{}', 当前值：'{}'",
                 e.getName(), expectedType, actualType, value);
         return toR(SYSTEM_ERROR_CODE, e, "参数类型错误：" + message, false);
@@ -405,15 +412,25 @@ public class GlobalExceptionHandler {
     @Getter
     @AllArgsConstructor
     public enum ErrorType {
-        /** 参数错误 */
+        /**
+         * 参数错误
+         */
         PARAM("参数错误"),
-        /** 系统错误 */
+        /**
+         * 系统错误
+         */
         SYSTEM("系统错误"),
-        /** 未知错误 */
+        /**
+         * 未知错误
+         */
         UNKNOWN("未知错误"),
-        /** 未登录 */
+        /**
+         * 未登录
+         */
         NO_LOGIN("未登录"),
-        /** 没有权限 */
+        /**
+         * 没有权限
+         */
         NO_PERMISSION("没有权限");
 
         private final String message;

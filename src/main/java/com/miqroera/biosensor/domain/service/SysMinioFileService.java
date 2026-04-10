@@ -5,8 +5,6 @@ import com.miqroera.biosensor.domain.model.SysMinioFile;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -44,16 +42,6 @@ public interface SysMinioFileService extends IService<SysMinioFile> {
      */
     Object upload(String path, MultipartFile file, String[] defaultAllowedExtension);
 
-    /**
-     * 内部上传方法
-     *
-     * @param businessEnum 业务枚举
-     * @param inputStream  文件输入流
-     * @param fileName     文件名
-     * @return 文件在 MinIO 中的路径
-     * @throws IOException IO 异常
-     */
-    String innerUpload(Object businessEnum, InputStream inputStream, String fileName) throws IOException;
 
     /**
      * 根据 ID 下载文件

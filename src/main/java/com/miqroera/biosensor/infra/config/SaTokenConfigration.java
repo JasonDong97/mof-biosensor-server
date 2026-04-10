@@ -29,7 +29,8 @@ public class SaTokenConfigration implements WebMvcConfigurer {
             "/swagger-resources/**",  // Swagger 资源
             "/v3/api-docs/**",        // OpenAPI v3 JSON
             "/actuator/**",           // Actuator 端点
-            "/v1/auth/**"             // 认证接口
+            "/v1/auth/**",             // 认证接口
+            "/v1/files/**"             // 文件接口（无需鉴权）
     };
 
     /*

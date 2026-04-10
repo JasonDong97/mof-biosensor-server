@@ -1,10 +1,6 @@
 package com.miqroera.biosensor.domain.model;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -179,4 +175,10 @@ public class SysUser implements Serializable {
      */
     @Schema(description = "备注")
     private String remark;
+
+    /**
+     * 注册时间
+     */
+    @Schema(description = "注册时间")
+    private LocalDateTime regTime;
 }

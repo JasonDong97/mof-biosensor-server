@@ -7,6 +7,7 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 用户信息响应 VO
@@ -99,4 +100,7 @@ public class UserInfoVO implements Serializable {
      */
     @Schema(description = "累计检测次数")
     private Integer totalMeasures;
+
+    @Schema(description = "注册时间")
+    private LocalDateTime regTime;
 }

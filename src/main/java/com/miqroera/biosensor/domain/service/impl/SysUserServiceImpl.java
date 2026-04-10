@@ -148,6 +148,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .weight(user.getWeight())
                 .firstMeasureDate(user.getFirstMeasureDate())
                 .totalMeasures(user.getTotalMeasures())
+                .regTime(user.getRegTime())
                 .build();
     }
 
@@ -227,7 +228,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (isNew) {
             // 创建新用户
             user = new SysUser();
+            user.setCreateTime(LocalDateTime.now());
+            user.setRegTime(LocalDateTime.now());
         }
+
         user.setWxMpOpenid(openid);
         user.setNickName(dto.getNickname() != null ? dto.getNickname() : "微信用户");
         user.setAvatar(dto.getAvatar());
@@ -260,6 +264,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             user.setUserType("0"); // 普通用户
             user.setStatus("0");   // 正常状态
             user.setDelFlag("0");  // 未删除
+            user.setCreateTime(LocalDateTime.now());
+            user.setRegTime(LocalDateTime.now());
             save(user);
             log.info("创建新用户，userId: {}, phone: {}", user.getId(), phone);
         }
@@ -301,6 +307,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .weight(user.getWeight())
                 .firstMeasureDate(user.getFirstMeasureDate())
                 .totalMeasures(user.getTotalMeasures())
+                .regTime(user.getRegTime())
                 .build();
 
         // 更新最后登录时间

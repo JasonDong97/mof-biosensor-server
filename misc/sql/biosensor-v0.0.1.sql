@@ -189,3 +189,5 @@ CREATE TABLE `sys_minio_file`
 
 alter table sys_user
     add unique index uk_phone (phonenumber, del_flag) comment '';
+
+alter table sys_user add column reg_time datetime comment '注册时间';

@@ -15,7 +15,6 @@ import com.miqroera.biosensor.domain.model.vo.SummaryVO;
 import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
 import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IRecordService;
-import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +47,6 @@ import java.util.stream.Collectors;
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
 
     private final IDeviceService deviceService;
-    private final IUserDeviceService userDeviceService;
     private final SysUserMapper sysUserMapper;
     private final com.miqroera.biosensor.domain.mapper.DeviceMapper deviceMapper;
     private final RecordMapper recordMapper;

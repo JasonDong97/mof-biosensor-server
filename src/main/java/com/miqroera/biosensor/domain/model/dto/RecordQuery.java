@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * 检测记录查询参数 DTO
@@ -35,14 +35,14 @@ public class RecordQuery implements Serializable {
     /**
      * 开始时间
      */
-    @Schema(description = "开始时间", example = "2026-01-01T00:00:00")
-    private LocalDateTime startTime;
+    @Schema(description = "开始时间", example = "2026-01-01")
+    private LocalDate startTime;
 
     /**
      * 结束时间
      */
-    @Schema(description = "结束时间", example = "2026-12-31T23:59:59")
-    private LocalDateTime endTime;
+    @Schema(description = "结束时间", example = "2026-12-31")
+    private LocalDate endTime;
 
     /**
      * 场景标签（0 未选 1 空腹 2 餐后 3 运动后）

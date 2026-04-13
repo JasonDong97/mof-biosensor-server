@@ -11,7 +11,8 @@ spring:
 
 logging:
   level:
-    com.miqroera: info
+    com.miqroera: debug
+  
     
 mybatis-plus:
   global-config:

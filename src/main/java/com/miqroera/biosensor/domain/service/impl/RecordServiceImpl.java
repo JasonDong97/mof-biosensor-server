@@ -2,6 +2,7 @@ package com.miqroera.biosensor.domain.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.RecordMapper;
@@ -117,43 +118,27 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         log.info("查询检测记录，userId: {}, 查询参数：{}", userId, query);
 
         // 1. 构建查询条件
-        LambdaQueryWrapper<Record> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Record::getUserId, userId)
+        LambdaQueryChainWrapper<Record> queryWrapper = this.lambdaQuery()
+                .eq(Record::getUserId, userId)
                 .eq(Record::getDelFlag, "0");
 
         // 时间范围筛选
         if (query.getStartTime() != null) {
-            queryWrapper.ge(Record::getTimestamp, query.getStartTime());
+            queryWrapper.ge(Record::getTimestamp, query.getStartTime().atStartOfDay());
         }
         if (query.getEndTime() != null) {
-            queryWrapper.le(Record::getTimestamp, query.getEndTime());
+            queryWrapper.le(Record::getTimestamp, query.getEndTime().atTime(LocalTime.MAX));
         }
 
-        // 场景类型筛选
-        if (query.getSceneType() != null) {
-            queryWrapper.eq(Record::getSceneType, query.getSceneType());
-        }
-
-        // 设备 SN 筛选
-        if (query.getDeviceSn() != null && !query.getDeviceSn().isBlank()) {
-            queryWrapper.eq(Record::getDeviceSn, query.getDeviceSn());
-        }
-
-        // 等级筛选
-        if (query.getLevel() != null) {
-            queryWrapper.eq(Record::getLevel, query.getLevel());
-        }
-
-        // 按检测时间倒序
-        queryWrapper.orderByDesc(Record::getTimestamp);
-
-        // 2. 分页查询
-        Page<Record> page = new Page<>(query.getPageNum(), query.getPageSize());
-        Page<Record> resultPage = this.page(page, queryWrapper);
+        Page<Record> pageResult = queryWrapper.eq(query.getSceneType() != null, Record::getSceneType, query.getSceneType())
+                .eq(query.getDeviceSn() != null && !query.getDeviceSn().isBlank(), Record::getDeviceSn, query.getDeviceSn())
+                .eq(query.getLevel() != null, Record::getLevel, query.getLevel())
+                .orderByDesc(Record::getTimestamp)
+                .page(new Page<>(query.getPageNum(), query.getPageSize()));
 
         // 3. 转换为 PageResult
-        log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, resultPage.getRecords().size());
-        return PageResult.build(resultPage, RecordListVO.class);
+        log.info("查询检测记录成功，userId: {}, 记录数：{}", userId, pageResult.getRecords().size());
+        return PageResult.build(pageResult, RecordListVO.class);
     }
 
     @Override

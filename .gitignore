@@ -36,3 +36,5 @@ logs
 .vscode
 .lingma
 .cline
+.mvn
+.claude.json

@@ -57,6 +57,12 @@ src/main/java/com/miqroera/biosensor/
 
 ## Key Patterns
 
+### Naming Conventions
+- **Class names**: PascalCase (e.g., `ResourceCalendarController`)
+- **Methods/Variables**: camelCase (e.g., `getUserById`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `DEFAULT_PAGE_SIZE`)
+- **Database tables**: `snake_case` with `t_` prefix (e.g., `t_resource_calendar`)
+
 ### Response Format
 - Success: `R.ok(data)` or `R.ok(data, "message")`
 - Failure: `R.fail(message)` or `R.fail(message, data)`
@@ -65,6 +71,28 @@ src/main/java/com/miqroera/biosensor/
 ### Exception Handling
 - Use `ServiceException.of(format, args)` for business exceptions
 - `BaseException` for base exception type
+
+### Critical Constraints
+- Controller must not access database directly
+- Service layer handles all business logic
+- Use MyBatis Plus BaseMapper for all data access
+- All IO operations must be async or use connection pools
+
+### Mandatory Rules
+- **Complex SQL must use XML mappers**: Never use `LambdaUpdateWrapper.setSql()` in Service layer
+- XML file location: `src/main/resources/mapper/{MapperName}.xml`
+- Steps: Define method in Mapper interface with `@Param`, write SQL in XML
+
+### Code Style
+- **Logging**: `log.error()` for errors (with stack trace), `log.info()` for info, `log.debug()` for debug
+- **Null safety**: Always check for null when operating on collections to avoid NPE
+- **DRY**: Extract common logic into reusable methods
+- **Method length**: Keep methods under 80-100 lines, extract steps into private helper methods
+
+### Security
+- **SQL injection**: All queries must use parameterized statements
+- **Passwords**: Must be encrypted with BCrypt
+- **API keys**: Use environment variables, never hardcode
 
 ### Complex SQL
 - **Required**: Use XML mappers for complex queries (not `LambdaUpdateWrapper.setSql()`)
@@ -118,3 +146,11 @@ src/main/java/com/miqroera/biosensor/
 - API documentation: http://localhost:9093/api/doc.html (when running)
 - Project docs: `misc/docs/` (产品需求文档, 接口开发进度, etc.)
 - SQL scripts: `misc/sql/`
+
+## What NOT to Do
+
+- Don't use `Object` type (avoid raw Object, use proper generics)
+- Don't write business logic in Controller layer
+- Don't modify files in `target/` directory directly
+- Don't commit `.env` or config files containing passwords
+- Don't use deprecated APIs

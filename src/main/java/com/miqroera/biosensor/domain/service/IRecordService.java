@@ -66,4 +66,14 @@ public interface IRecordService extends IService<Record> {
      * @return 统计摘要
      */
     SummaryVO getSummary(Long userId, String deviceSn);
+
+    /**
+     * 获取记录详情
+     *
+     * @param userId   用户 ID
+     * @param recordId 记录 ID
+     * @return 记录详情
+     */
+    Record getRecordDetail(Long userId, String recordId);
+
 }

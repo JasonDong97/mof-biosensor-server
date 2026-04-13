@@ -13,6 +13,7 @@ import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 import com.miqroera.biosensor.infra.domain.model.R;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,16 @@ public class RecordController {
     public R<Record> addRecord(@Valid @RequestBody RecordAddDTO dto) {
         Long userId = StpUtil.getLoginIdAsLong();
         Record record = recordService.addRecord(userId, dto);
+        return R.ok(record);
+    }
+
+    @GetMapping("/{recordId}")
+    @Operation(summary = "获取检测记录详情", description = "获取指定检测记录的详细信息")
+    public R<Record> getRecordDetail(
+            @Parameter(description = "检测记录 ID")
+            @PathVariable String recordId) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        Record record = recordService.getRecordDetail(userId, recordId);
         return R.ok(record);
     }
 

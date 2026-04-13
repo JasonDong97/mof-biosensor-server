@@ -197,6 +197,13 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
                 .build();
     }
 
+    @Override
+    public Record getRecordDetail(Long userId, String recordId) {
+        return this.lambdaQuery().eq(Record::getUserId, userId)
+                .eq(Record::getId, recordId)
+                .one();
+    }
+
     /**
      * 获取指定日期范围内每天的平均浓度
      */

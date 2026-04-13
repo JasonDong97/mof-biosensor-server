@@ -47,7 +47,7 @@ public class RecordAddDTO implements Serializable {
      * 场景标签（0 未选 1 空腹 2 餐后 3 运动后）
      */
     @Schema(description = "场景标签（0 未选 1 空腹 2 餐后 3 运动后）", example = "1", defaultValue = "0")
-    private Byte sceneType = 0;
+    private Integer sceneType = 0;
 
     /**
      * 浓度值 (ppb)

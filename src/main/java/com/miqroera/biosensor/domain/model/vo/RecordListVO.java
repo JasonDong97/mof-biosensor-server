@@ -50,7 +50,7 @@ public class RecordListVO implements Serializable {
      * 场景标签（0 未选 1 空腹 2 餐后 3 运动后）
      */
     @Schema(description = "场景标签（0 未选 1 空腹 2 餐后 3 运动后）")
-    private Byte sceneType;
+    private Integer sceneType;
 
     /**
      * 浓度值 (ppb)

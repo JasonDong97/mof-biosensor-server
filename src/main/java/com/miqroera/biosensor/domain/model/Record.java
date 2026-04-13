@@ -1,10 +1,6 @@
 package com.miqroera.biosensor.domain.model;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,7 +63,7 @@ public class Record implements Serializable {
      * 场景标签（0 未选 1 空腹 2 餐后 3 运动后）
      */
     @Schema(description = "场景标签（0 未选 1 空腹 2 餐后 3 运动后）")
-    private Byte sceneType;
+    private Integer sceneType;
 
     /**
      * 浓度值 (ppb)

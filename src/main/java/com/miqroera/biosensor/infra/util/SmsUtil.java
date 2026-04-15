@@ -6,6 +6,7 @@ import com.aliyun.sdk.service.dypnsapi20170525.AsyncClient;
 import com.aliyun.sdk.service.dypnsapi20170525.models.SendSmsVerifyCodeRequest;
 import com.aliyun.sdk.service.dypnsapi20170525.models.SendSmsVerifyCodeResponse;
 import com.google.gson.Gson;
+import com.miqroera.biosensor.infra.config.SmsConfig;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,15 +19,19 @@ public class SmsUtil {
     /**
      * 发送短信验证码
      *
-     * @param phonenumber   手机号
-     * @param signName      签名
-     * @param templateCode  模板ID
-     * @param templateParam 模板参数
+     * @param smsConfig
      * @return 发送结果
      */
     @SneakyThrows
-    public static String sendCode(String phonenumber, String signName, String templateCode, String templateParam) {
+    public static String sendCode(String phoneNumber,  SmsConfig smsConfig) {
         // Configure Credentials authentication information
+        if (smsConfig == null) {
+            log.error("SmsConfig is null");
+            return null;
+        }
+
+        System.setProperty("alibabacloud.accessKeyId", smsConfig.getAccessKeyId());
+        System.setProperty("alibabacloud.accessKeyIdSecret", smsConfig.getAccessKeySecret());
         DefaultCredentialProvider provider = DefaultCredentialProvider.builder()
                 .customizeProviders(SystemPropertiesCredentialProvider.create())
                 .build();
@@ -48,10 +53,10 @@ public class SmsUtil {
 
             // Parameter settings for API request
             SendSmsVerifyCodeRequest sendSmsVerifyCodeRequest = SendSmsVerifyCodeRequest.builder()
-                    .signName(signName)
-                    .phoneNumber(phonenumber)
-                    .templateCode(templateCode)
-                    .templateParam(templateParam)
+                    .phoneNumber(phoneNumber)
+                    .signName(smsConfig.getSignName())
+                    .templateCode(smsConfig.getTemplateCode())
+                    .templateParam(smsConfig.getTemplateParam())
                     // Request-level configuration rewrite, can set Http request parameters, etc.
                     // .requestConfiguration(RequestConfiguration.create().setHttpHeaders(new HttpHeaders()))
                     .build();

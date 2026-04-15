@@ -1,6 +1,7 @@
 package com.miqroera.biosensor.domain.service.impl;
 
 import com.miqroera.biosensor.domain.service.ISmsService;
+import com.miqroera.biosensor.infra.config.SmsConfig;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.infra.domain.model.R;
 import com.miqroera.biosensor.infra.util.RedisUtil;
@@ -8,7 +9,6 @@ import com.miqroera.biosensor.infra.util.SmsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -24,22 +24,24 @@ import java.util.Random;
 @Service
 public class SmsServiceImpl implements ISmsService {
 
-    private final RedisUtil redisUtil;
-
-    /** 验证码 Redis Key 前缀 */
+    /**
+     * 验证码 Redis Key 前缀
+     */
     private static final String SMS_CODE_PREFIX = "sms:code:";
-    /** 验证码有效期：5分钟 */
+    /**
+     * 验证码有效期：5分钟
+     */
     private static final long SMS_CODE_EXPIRE_SECONDS = 300;
-    /** 验证码发送间隔：60秒 */
+    /**
+     * 验证码发送间隔：60秒
+     */
     private static final long SMS_SEND_INTERVAL_SECONDS = 60;
-    /** 验证码发送间隔 Redis Key 前缀 */
+    /**
+     * 验证码发送间隔 Redis Key 前缀
+     */
     private static final String SMS_SEND_INTERVAL_PREFIX = "sms:send:interval:";
-
-    @Value("${aliyun.sms.sign-name:MiQroBreath}")
-    private String signName;
-
-    @Value("${aliyun.sms.template-code:SMS_284600001}")
-    private String templateCode;
+    private final RedisUtil redisUtil;
+    private final SmsConfig smsConfig;
 
     @Override
     public R<Void> sendCode(String phoneNumber) {
@@ -62,8 +64,7 @@ public class SmsServiceImpl implements ISmsService {
         redisUtil.set(intervalKey, "1", SMS_SEND_INTERVAL_SECONDS);
 
         // 调用阿里云发送短信
-        String templateParam = String.format("{\"code\":\"%s\"}", code);
-        String result = SmsUtil.sendCode(phoneNumber, signName, templateCode, templateParam);
+        String result = SmsUtil.sendCode(phoneNumber, smsConfig);
         log.info("短信发送成功，phoneNumber: {}, result: {}", phoneNumber, result);
         return R.ok();
     }

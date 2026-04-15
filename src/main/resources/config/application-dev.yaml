@@ -28,11 +28,18 @@ spring:
       port: 31105
       password: 'psQ!4Tr$!qSzk@'
       database: 5
-      
+
 minio:
   url: http://10.36.160.33:31102
   # url: http://139.196.211.120:6850
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: miqrobreath
-  
+
+sms:
+  aliyun:
+    access-key-id: ${ALIYUN_ACCESS_KEY_ID}
+    access-key-secret: ${ALIYUN_ACCESS_KEY_ID_SECRET}
+    sign-name: 云渚科技验证平台
+    template-code: 100001
+    template-param: '{"code":"##code##","min":5}'

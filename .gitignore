@@ -38,3 +38,4 @@ logs
 .cline
 .mvn
 .claude.json
+.env

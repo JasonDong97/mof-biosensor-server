@@ -1,5 +1,7 @@
 package com.miqroera.biosensor.domain.service.impl;
 
+import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeResponse;
+import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeResponseBody;
 import com.miqroera.biosensor.domain.service.ISmsService;
 import com.miqroera.biosensor.infra.config.SmsConfig;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
@@ -74,23 +76,11 @@ public class SmsServiceImpl implements ISmsService {
         if (StringUtils.isBlank(phoneNumber) || StringUtils.isBlank(code)) {
             return false;
         }
+        CheckSmsVerifyCodeResponse response = SmsUtil.checkCode(phoneNumber, code, smsConfig);
+        CheckSmsVerifyCodeResponseBody body = response.getBody();
+        log.info("{} 短信验证码验证结果：{}", phoneNumber, body);
 
-        String codeKey = SMS_CODE_PREFIX + phoneNumber;
-        String cachedCode = redisUtil.get(codeKey, String.class);
-
-        if (cachedCode == null) {
-            log.warn("验证码已过期或不存在，phoneNumber: {}", phoneNumber);
-            return false;
-        }
-
-        if (cachedCode.equals(code)) {
-            // 验证成功后删除验证码
-            redisUtil.del(codeKey);
-            return true;
-        }
-
-        log.warn("验证码错误，phoneNumber: {}, inputCode: {}", phoneNumber, code);
-        return false;
+        return body.getSuccess();
     }
 
     /**

@@ -53,11 +53,10 @@ public interface IRecordService extends IService<Record> {
      * 获取趋势数据（折线图）
      *
      * @param userId   用户 ID
-     * @param type     筛选类型：week 按周, day 按天
      * @param deviceSn 设备SN，不传则查用户所有设备
      * @return 趋势数据
      */
-    TrendDataVO getTrendData(Long userId, String type, String deviceSn);
+    TrendDataVO getTrendData(Long userId, String deviceSn);
 
     /**
      * 获取统计摘要

@@ -1,19 +1,16 @@
 package com.miqroera.biosensor.infra.util;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.aliyun.auth.credentials.provider.DefaultCredentialProvider;
 import com.aliyun.auth.credentials.provider.SystemPropertiesCredentialProvider;
-import com.aliyun.sdk.service.dypnsapi20170525.AsyncClient;
-import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeRequest;
-import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeResponse;
-import com.aliyun.sdk.service.dypnsapi20170525.models.SendSmsVerifyCodeRequest;
-import com.aliyun.sdk.service.dypnsapi20170525.models.SendSmsVerifyCodeResponse;
-import com.google.gson.Gson;
+import com.aliyun.sdk.service.dysmsapi20170525.AsyncClient;
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.miqroera.biosensor.infra.config.SmsConfig;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 public class SmsUtil {
@@ -25,7 +22,7 @@ public class SmsUtil {
      * @return 发送结果
      */
     @SneakyThrows
-    public static String sendCode(String phoneNumber, SmsConfig smsConfig) {
+    public static SendSmsResponse sendCode(String phoneNumber,String code, SmsConfig smsConfig) {
         // Configure Credentials authentication information
         if (smsConfig == null) {
             log.error("SmsConfig is null");
@@ -35,36 +32,18 @@ public class SmsUtil {
         // Configure the Client
         try (AsyncClient client = getClient(smsConfig)) {
             // Parameter settings for API request
-            SendSmsVerifyCodeRequest sendSmsVerifyCodeRequest = SendSmsVerifyCodeRequest.builder()
-                    .phoneNumber(phoneNumber)
+            JSONObject params = JSON.parseObject(smsConfig.getTemplateParam());
+            params.put("code", code);
+            SendSmsRequest sendSmsRequest = SendSmsRequest.builder()
+                    .phoneNumbers(phoneNumber)
                     .signName(smsConfig.getSignName())
                     .templateCode(smsConfig.getTemplateCode())
-                    .templateParam(smsConfig.getTemplateParam())
+                    .templateParam(params.toJSONString())
                     // Request-level configuration rewrite, can set Http request parameters, etc.
                     // .requestConfiguration(RequestConfiguration.create().setHttpHeaders(new HttpHeaders()))
                     .build();
 
-            // Asynchronously get the return value of the API request
-            CompletableFuture<SendSmsVerifyCodeResponse> response = client.sendSmsVerifyCode(sendSmsVerifyCodeRequest);
-            // Synchronously get the return value of the API request
-            SendSmsVerifyCodeResponse resp = response.get();
-            return new Gson().toJson(resp);
-        }
-    }
-
-    @SneakyThrows
-    public static CheckSmsVerifyCodeResponse checkCode(String phoneNumber, String code, SmsConfig smsConfig) {
-        // Configure the Client
-        try (AsyncClient client = getClient(smsConfig)) {
-
-            // Parameter settings for API request
-            CheckSmsVerifyCodeRequest sendSmsVerifyCodeRequest = CheckSmsVerifyCodeRequest.builder()
-                    .phoneNumber(phoneNumber)
-                    .verifyCode(code)
-                    // Request-level configuration rewrite, can set Http request parameters, etc.
-                    // .requestConfiguration(RequestConfiguration.create().setHttpHeaders(new HttpHeaders()))
-                    .build();
-            return client.checkSmsVerifyCode(sendSmsVerifyCodeRequest).get();
+            return client.sendSms(sendSmsRequest).get();
         }
     }
 
@@ -83,7 +62,7 @@ public class SmsUtil {
                 .overrideConfiguration(
                         ClientOverrideConfiguration.create()
                                 // Endpoint 请参考 https://api.aliyun.com/product/Dypnsapi
-                                .setEndpointOverride("dypnsapi.aliyuncs.com")
+                                .setEndpointOverride("dysmsapi.aliyuncs.com")
                         //.setConnectTimeout(Duration.ofSeconds(30))
                 )
                 .build();

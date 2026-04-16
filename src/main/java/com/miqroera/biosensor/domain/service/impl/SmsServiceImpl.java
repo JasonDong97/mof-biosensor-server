@@ -1,11 +1,11 @@
 package com.miqroera.biosensor.domain.service.impl;
 
-import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeResponse;
-import com.aliyun.sdk.service.dypnsapi20170525.models.CheckSmsVerifyCodeResponseBody;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.miqroera.biosensor.domain.service.ISmsService;
 import com.miqroera.biosensor.infra.config.SmsConfig;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
-import com.miqroera.biosensor.infra.domain.model.R;
 import com.miqroera.biosensor.infra.util.RedisUtil;
 import com.miqroera.biosensor.infra.util.SmsUtil;
 import lombok.RequiredArgsConstructor;
@@ -46,12 +46,12 @@ public class SmsServiceImpl implements ISmsService {
     private final SmsConfig smsConfig;
 
     @Override
-    public R<Void> sendCode(String phoneNumber) {
+    public SendSmsResponse sendCode(String phoneNumber) {
         // 参数校验
         validatePhoneNumber(phoneNumber);
 
         // 检查发送间隔
-        checkSendInterval(phoneNumber);
+        // checkSendInterval(phoneNumber);
 
         // 生成验证码
         String code = generateCode();
@@ -66,9 +66,10 @@ public class SmsServiceImpl implements ISmsService {
         redisUtil.set(intervalKey, "1", SMS_SEND_INTERVAL_SECONDS);
 
         // 调用阿里云发送短信
-        String result = SmsUtil.sendCode(phoneNumber, smsConfig);
-        log.info("短信发送成功，phoneNumber: {}, result: {}", phoneNumber, result);
-        return R.ok();
+        SendSmsResponse sendSmsResponse = SmsUtil.sendCode(phoneNumber, code, smsConfig);
+        log.info("发送短信到 {}， 响应结果: {}", phoneNumber, JSON.toJSONString(sendSmsResponse, JSONWriter.Feature.PrettyFormat));
+
+        return sendSmsResponse;
     }
 
     @Override
@@ -76,11 +77,24 @@ public class SmsServiceImpl implements ISmsService {
         if (StringUtils.isBlank(phoneNumber) || StringUtils.isBlank(code)) {
             return false;
         }
-        CheckSmsVerifyCodeResponse response = SmsUtil.checkCode(phoneNumber, code, smsConfig);
-        CheckSmsVerifyCodeResponseBody body = response.getBody();
-        log.info("{} 短信验证码验证结果：{}", phoneNumber, body);
-
-        return body.getSuccess();
+        // 从 Redis 获取存储的验证码
+        String codeKey = SMS_CODE_PREFIX + phoneNumber;
+        Object storedCodeObj = redisUtil.get(codeKey);
+        if (storedCodeObj == null) {
+            log.warn("验证码已过期或不存在: phone={}", phoneNumber);
+            return false;
+        }
+        // 验证码比对
+        String storedCode = storedCodeObj.toString();
+        boolean matched = storedCode.equals(code);
+        if (matched) {
+            log.info("验证码校验成功: phone={}", phoneNumber);
+            // 验证成功后删除验证码，防止重复使用
+            redisUtil.del(codeKey);
+        } else {
+            log.warn("验证码错误: phone={}", phoneNumber);
+        }
+        return matched;
     }
 
     /**

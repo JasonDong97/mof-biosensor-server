@@ -1,5 +1,7 @@
 package com.miqroera.biosensor.web;
 
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponseBody;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.dto.SmsCodeVerifyDTO;
 import com.miqroera.biosensor.domain.model.dto.SmsSendDTO;
@@ -37,7 +39,14 @@ public class SmsController {
     @PostMapping("/send")
     @Operation(summary = "发送短信验证码", description = "向指定手机号发送登录验证码")
     public R<Void> sendCode(@RequestBody @Valid SmsSendDTO dto) {
-        return smsService.sendCode(dto.getPhoneNumber());
+
+        SendSmsResponse response = smsService.sendCode(dto.getPhoneNumber());
+        SendSmsResponseBody body = response.getBody();
+        String message = "发送失败";
+        if (body != null) {
+            message = body.getMessage();
+        }
+        return R.build(response.getStatusCode(), message);
     }
 
     /**

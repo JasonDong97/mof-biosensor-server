@@ -140,8 +140,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     @Override
-    public TrendDataVO getTrendData(Long userId, String type, String deviceSn) {
-        log.info("获取趋势数据，userId: {}, type: {}, deviceSn: {}", userId, type, deviceSn);
+    public TrendDataVO getTrendData(Long userId, String deviceSn) {
 
         // 计算最近14天的日期范围
         LocalDate today = LocalDate.now();

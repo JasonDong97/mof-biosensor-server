@@ -40,7 +40,7 @@ public class RecordAddDTO implements Serializable {
      * 检测时间
      */
     @NotNull(message = "检测时间不能为空")
-    @Schema(description = "检测时间", example = "2026-03-31T10:30:00", required = true)
+    @Schema(description = "检测时间", example = "2026-03-31 10:30:00", required = true)
     private LocalDateTime timestamp;
 
     /**

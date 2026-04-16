@@ -1,6 +1,6 @@
 package com.miqroera.biosensor.domain.service;
 
-import com.miqroera.biosensor.infra.domain.model.R;
+import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 
 /**
  * 短信服务接口
@@ -16,7 +16,7 @@ public interface ISmsService {
      * @param phoneNumber 手机号
      * @return 响应结果
      */
-    R<Void> sendCode(String phoneNumber);
+    SendSmsResponse sendCode(String phoneNumber);
 
     /**
      * 验证短信验证码

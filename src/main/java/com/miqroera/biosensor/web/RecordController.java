@@ -87,10 +87,9 @@ public class RecordController {
     @GetMapping("/stats/trend")
     @Operation(summary = "获取趋势数据", description = "获取本周与上周的每日浓度数据对比")
     public R<TrendDataVO> getTrendData(
-            @RequestParam(defaultValue = "week") String type,
-            @RequestParam(required = false) String deviceSn) {
+            @RequestParam(required = true) String deviceSn) {
         Long userId = StpUtil.getLoginIdAsLong();
-        return R.ok(recordService.getTrendData(userId, type, deviceSn));
+        return R.ok(recordService.getTrendData(userId, deviceSn));
     }
 
     /**

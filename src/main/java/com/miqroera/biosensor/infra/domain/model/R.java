@@ -42,6 +42,10 @@ public class R<T> implements Serializable {
         return build(OK_CODE, "请求成功", null);
     }
 
+    public static <T> R<T> ok(String msg) {
+        return build(OK_CODE, msg, null);
+    }
+
     public static <T> R<T> ok(T data) {
         return build(OK_CODE, "请求成功", data);
     }

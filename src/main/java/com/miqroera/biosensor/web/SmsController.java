@@ -1,5 +1,6 @@
 package com.miqroera.biosensor.web;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponseBody;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * 短信验证码控制器
@@ -38,15 +41,28 @@ public class SmsController {
      */
     @PostMapping("/send")
     @Operation(summary = "发送短信验证码", description = "向指定手机号发送登录验证码")
-    public R<Void> sendCode(@RequestBody @Valid SmsSendDTO dto) {
+    public R<Map<String, Object>> sendCode(@RequestBody @Valid SmsSendDTO dto) {
 
         SendSmsResponse response = smsService.sendCode(dto.getPhoneNumber());
         SendSmsResponseBody body = response.getBody();
-        String message = "发送失败";
-        if (body != null) {
-            message = body.getMessage();
+        if (body == null) {
+            return R.fail("发送失败");
         }
-        return R.build(response.getStatusCode(), message);
+
+        R<Map<String, Object>> r = new R<>();
+        JSONObject data = new JSONObject();
+        if ("OK".equalsIgnoreCase(body.getCode())) {
+            r.setCode(200);
+            r.setMsg("发送成功");
+            data.put("bizId", body.getBizId());
+        } else {
+            r.setCode(500);
+            r.setMsg(body.getMessage());
+            data.put("code", body.getCode());
+            data.put("requestId", body.getRequestId());
+            r.setData(data);
+        }
+        return r;
     }
 
     /**
@@ -56,6 +72,6 @@ public class SmsController {
     @Operation(summary = "验证短信验证码", description = "验证用户输入的验证码是否正确")
     public R<Boolean> verifyCode(@RequestBody @Valid SmsCodeVerifyDTO dto) {
         boolean result = smsService.verifyCode(dto.getPhoneNumber(), dto.getCode());
-        return R.ok(result);
+        return result ? R.ok("校验成功") : R.fail("验证码错误");
     }
 }

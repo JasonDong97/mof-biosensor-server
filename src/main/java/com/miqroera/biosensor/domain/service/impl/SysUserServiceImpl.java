@@ -12,6 +12,7 @@ import com.miqroera.biosensor.domain.model.dto.WxLoginDTO;
 import com.miqroera.biosensor.domain.model.vo.AuthResponseVO;
 import com.miqroera.biosensor.domain.model.vo.TokenVO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
+import com.miqroera.biosensor.domain.service.ISmsService;
 import com.miqroera.biosensor.domain.service.ISysUserService;
 import com.miqroera.biosensor.domain.service.MockService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
@@ -54,6 +55,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private static final long REFRESH_TOKEN_TIMEOUT = 30 * 24 * 60 * 60;
     private final RedisUtil redisUtil;
     private final MockService mockService;
+    private final ISmsService smsService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -213,6 +215,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         updateById(user);
         log.info("用户信息更新成功，userId: {}", userId);
+    }
+
+    @CacheEvict(value = "miqrobreath:user_profile", allEntries = true)
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysUser phoneBind(long userId, String phone) {
+        this.lambdaUpdate()
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getPhonenumber, phone)
+                .update();
+        return getById(userId);
     }
 
     /**

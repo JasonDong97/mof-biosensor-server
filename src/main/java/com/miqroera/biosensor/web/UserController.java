@@ -2,8 +2,11 @@ package com.miqroera.biosensor.web;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.miqroera.biosensor.domain.model.SysUser;
+import com.miqroera.biosensor.domain.model.dto.PhoneBindDTO;
 import com.miqroera.biosensor.domain.model.dto.UserProfileUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
+import com.miqroera.biosensor.domain.service.ISmsService;
 import com.miqroera.biosensor.domain.service.ISysUserService;
 import com.miqroera.biosensor.infra.domain.model.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final ISysUserService sysUserService;
+    private final ISmsService smsService;
 
     /**
      * 获取当前用户信息
@@ -49,5 +53,16 @@ public class UserController {
         Long userId = StpUtil.getLoginIdAsLong();
         sysUserService.updateUserProfile(userId, dto);
         return R.ok();
+    }
+
+    @PostMapping("/phone-bind")
+    @Operation(summary = "手机号绑定", description = "绑定手机号")
+    public R<SysUser> phoneBind(@Valid @RequestBody PhoneBindDTO dto) {
+        long userId = StpUtil.getLoginIdAsLong();
+        boolean verified = smsService.verifyCode(dto.getPhonenumber(), dto.getCode());
+        if (!verified) {
+            return R.fail("验证码错误");
+        }
+        return R.ok(sysUserService.phoneBind(userId, dto.getPhonenumber()));
     }
 }

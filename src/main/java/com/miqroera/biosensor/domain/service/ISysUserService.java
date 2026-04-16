@@ -71,4 +71,13 @@ public interface ISysUserService extends IService<SysUser> {
      * @return LoginUser 对象
      */
     LoginUser getLoginUserById(Long userId);
+
+    /**
+     * 绑定手机号
+     *
+     * @param userId 用户 ID
+     * @param phone  手机号
+     * @return
+     */
+    SysUser phoneBind(long userId, String phone);
 }

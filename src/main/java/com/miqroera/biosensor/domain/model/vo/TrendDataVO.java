@@ -27,14 +27,20 @@ public class TrendDataVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 本周数据
+     * 空腹数据（近14天）
      */
-    @Schema(description = "本周数据")
-    private List<DailyValueVO> thisWeek;
+    @Schema(description = "空腹数据（近14天）")
+    private List<DailyValueVO> fasting;
 
     /**
-     * 上周数据
+     * 餐后数据（近14天）
      */
-    @Schema(description = "上周数据")
-    private List<DailyValueVO> lastWeek;
+    @Schema(description = "餐后数据（近14天）")
+    private List<DailyValueVO> postmeal;
+
+    /**
+     * 运动后数据（近14天）
+     */
+    @Schema(description = "运动后数据（近14天）")
+    private List<DailyValueVO> afterExercise;
 }

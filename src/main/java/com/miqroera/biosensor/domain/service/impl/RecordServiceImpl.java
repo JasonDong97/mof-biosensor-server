@@ -145,20 +145,24 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     public TrendDataVO getTrendData(Long userId, String type, String deviceSn) {
         log.info("获取趋势数据，userId: {}, type: {}, deviceSn: {}", userId, type, deviceSn);
 
-        // 计算本周和上周的日期范围
+        // 计算最近14天的日期范围
         LocalDate today = LocalDate.now();
-        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate lastWeekStart = weekStart.minusWeeks(1);
+        LocalDate startDate = today.minusDays(13);
+        LocalDate endDate = today.plusDays(1);
 
-        // 查询本周数据
-        List<DailyValueVO> thisWeekData = getDailyAverages(userId, deviceSn, lastWeekStart, weekStart);
+        // 查询空腹数据 (sceneType=1)
+        List<DailyValueVO> fastingData = getDailyAverages(userId, deviceSn, 1, startDate, endDate);
 
-        // 查询上周数据
-        List<DailyValueVO> lastWeekData = getDailyAverages(userId, deviceSn, lastWeekStart.minusWeeks(1), lastWeekStart);
+        // 查询餐后数据 (sceneType=2)
+        List<DailyValueVO> postmealData = getDailyAverages(userId, deviceSn, 2, startDate, endDate);
+
+        // 查询运动后数据 (sceneType=3)
+        List<DailyValueVO> afterExerciseData = getDailyAverages(userId, deviceSn, 3, startDate, endDate);
 
         return TrendDataVO.builder()
-                .thisWeek(thisWeekData)
-                .lastWeek(lastWeekData)
+                .fasting(fastingData)
+                .postmeal(postmealData)
+                .afterExercise(afterExerciseData)
                 .build();
     }
 
@@ -205,10 +209,17 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     /**
-     * 获取指定日期范围内每天的平均浓度
+     * 获取指定日期范围内每天的平均浓度（按场景类型筛选）
+     *
+     * @param userId     用户ID
+     * @param deviceSn   设备序列号（可选）
+     * @param sceneType  场景类型（1-空腹 2-餐后 3-运动后）
+     * @param startDate  开始日期
+     * @param endDate    结束日期
+     * @return 每日平均浓度列表
      */
-    private List<DailyValueVO> getDailyAverages(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
-        List<Record> records = getAverage(userId, deviceSn, startDate, endDate);
+    private List<DailyValueVO> getDailyAverages(Long userId, String deviceSn, Integer sceneType, LocalDate startDate, LocalDate endDate) {
+        List<Record> records = getAverage(userId, deviceSn, sceneType, startDate, endDate);
 
         // 按日期分组计算平均值
         Map<LocalDate, List<Record>> byDate = records.stream()
@@ -237,7 +248,17 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         return result;
     }
 
-    private List<Record> getAverage(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
+    /**
+     * 查询指定日期范围内的检测记录
+     *
+     * @param userId     用户ID
+     * @param deviceSn   设备序列号（可选）
+     * @param sceneType  场景类型（可选，1-空腹 2-餐后 3-运动后）
+     * @param startDate  开始日期
+     * @param endDate    结束日期
+     * @return 符合条件的检测记录列表
+     */
+    private List<Record> getAverage(Long userId, String deviceSn, Integer sceneType, LocalDate startDate, LocalDate endDate) {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(LocalTime.MAX);
 
@@ -251,15 +272,24 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         if (deviceSn != null && !deviceSn.isBlank()) {
             queryWrapper.eq(Record::getDeviceSn, deviceSn);
         }
+        if (sceneType != null) {
+            queryWrapper.eq(Record::getSceneType, sceneType);
+        }
 
         return this.list(queryWrapper);
     }
 
     /**
      * 获取指定日期范围内的平均浓度
+     *
+     * @param userId     用户ID
+     * @param deviceSn   设备序列号（可选）
+     * @param startDate  开始日期
+     * @param endDate    结束日期
+     * @return 平均浓度值
      */
     private Double getAverageConcentration(Long userId, String deviceSn, LocalDate startDate, LocalDate endDate) {
-        List<Record> records = getAverage(userId, deviceSn, startDate, endDate);
+        List<Record> records = getAverage(userId, deviceSn, null, startDate, endDate);
         if (records.isEmpty()) {
             return 0.0;
         }

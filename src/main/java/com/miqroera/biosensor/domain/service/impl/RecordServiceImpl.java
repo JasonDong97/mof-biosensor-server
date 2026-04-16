@@ -7,13 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.RecordMapper;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
+import com.miqroera.biosensor.domain.model.Device;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
-import com.miqroera.biosensor.domain.model.vo.DailyValueVO;
-import com.miqroera.biosensor.domain.model.vo.RecordListVO;
-import com.miqroera.biosensor.domain.model.vo.SummaryVO;
-import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
+import com.miqroera.biosensor.domain.model.vo.*;
 import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IRecordService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
@@ -206,6 +204,52 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         return this.lambdaQuery().eq(Record::getUserId, userId)
                 .eq(Record::getId, recordId)
                 .one();
+    }
+
+    @Override
+    public RecordDetailVO getLatestRecord(Long userId, String deviceSn) {
+        // 1. 查询最新记录
+        Record record = this.lambdaQuery()
+                .eq(Record::getUserId, userId)
+                .eq(Record::getDeviceSn, deviceSn)
+                .eq(Record::getDelFlag, "0")
+                .orderByDesc(Record::getTimestamp)
+                .last("LIMIT 1")
+                .one();
+
+        if (record == null) {
+            return null;
+        }
+
+        // 2. 查询关联的设备信息
+        Device device = deviceMapper.selectOne(new LambdaQueryWrapper<Device>()
+                .eq(Device::getDeviceSn, record.getDeviceSn()));
+
+        // 3. 构建返回 VO
+        return RecordDetailVO.builder()
+                .id(record.getId())
+                .recordId(record.getRecordId())
+                .deviceSn(record.getDeviceSn())
+                .firmwareVersion(device != null ? device.getFirmwareVersion() : null)
+                .hardwareVersion(device != null ? device.getHardwareVersion() : null)
+                .deviceStatus(device != null ? device.getStatus() : null)
+                .timestamp(record.getTimestamp())
+                .sceneType(record.getSceneType())
+                .concentration(record.getConcentration())
+                .level(record.getLevel())
+                .levelLabel(record.getLevelLabel())
+                .suggestion(record.getSuggestion())
+                .rBase(record.getRBase())
+                .rGas(record.getRGas())
+                .adcValue(record.getAdcValue())
+                .temperature(record.getTemperature())
+                .humidity(record.getHumidity())
+                .heaterTemp(record.getHeaterTemp())
+                .algoVersion(record.getAlgoVersion())
+                .gasType(record.getGasType())
+                .extraData(record.getExtraData())
+                .createTime(record.getCreateTime())
+                .build();
     }
 
     /**

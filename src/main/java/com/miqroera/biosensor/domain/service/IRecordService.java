@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
+import com.miqroera.biosensor.domain.model.vo.RecordDetailVO;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
 import com.miqroera.biosensor.domain.model.vo.SummaryVO;
 import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
@@ -75,5 +76,14 @@ public interface IRecordService extends IService<Record> {
      * @return 记录详情
      */
     Record getRecordDetail(Long userId, String recordId);
+
+    /**
+     * 获取指定设备的最新一次检测记录（关联设备信息）
+     *
+     * @param userId   用户 ID
+     * @param deviceSn 设备 SN
+     * @return 最新记录详情
+     */
+    RecordDetailVO getLatestRecord(Long userId, String deviceSn);
 
 }

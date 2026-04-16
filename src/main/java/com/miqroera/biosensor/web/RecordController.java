@@ -6,6 +6,7 @@ import com.miqroera.biosensor.domain.model.Record;
 import com.miqroera.biosensor.domain.model.dto.RecordAddDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordBatchDTO;
 import com.miqroera.biosensor.domain.model.dto.RecordQuery;
+import com.miqroera.biosensor.domain.model.vo.RecordDetailVO;
 import com.miqroera.biosensor.domain.model.vo.RecordListVO;
 import com.miqroera.biosensor.domain.model.vo.SummaryVO;
 import com.miqroera.biosensor.domain.model.vo.TrendDataVO;
@@ -100,5 +101,15 @@ public class RecordController {
     public R<SummaryVO> getSummary(@RequestParam(required = false) String deviceSn) {
         Long userId = StpUtil.getLoginIdAsLong();
         return R.ok(recordService.getSummary(userId, deviceSn));
+    }
+
+    /**
+     * 获取指定设备的最新一次检测记录（关联设备信息）
+     */
+    @GetMapping("/latest")
+    @Operation(summary = "获取最新检测记录", description = "获取指定设备的最新一次检测记录，包含设备信息")
+    public R<RecordDetailVO> getLatestRecord(@RequestParam String deviceSn) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        return R.ok(recordService.getLatestRecord(userId, deviceSn));
     }
 }

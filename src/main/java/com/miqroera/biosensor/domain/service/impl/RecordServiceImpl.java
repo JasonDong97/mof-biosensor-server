@@ -142,9 +142,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     @Override
     public TrendDataVO getTrendData(Long userId, String deviceSn) {
 
-        // 计算最近14天的日期范围
+        // 计算最近 7 天的日期范围
         LocalDate today = LocalDate.now();
-        LocalDate startDate = today.minusDays(13);
+        LocalDate startDate = today.minusDays(7);
         LocalDate endDate = today.plusDays(1);
 
         // 查询空腹数据 (sceneType=1)

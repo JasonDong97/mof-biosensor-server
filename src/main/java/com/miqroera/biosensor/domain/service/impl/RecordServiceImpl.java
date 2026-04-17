@@ -144,7 +144,7 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
         // 计算最近 7 天的日期范围
         LocalDate today = LocalDate.now();
-        LocalDate startDate = today.minusDays(7);
+        LocalDate startDate = today.minusDays(6);
         LocalDate endDate = today.plusDays(1);
 
         // 查询空腹数据 (sceneType=1)

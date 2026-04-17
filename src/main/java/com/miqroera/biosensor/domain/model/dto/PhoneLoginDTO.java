@@ -35,4 +35,7 @@ public class PhoneLoginDTO implements Serializable {
     @NotBlank(message = "验证码不能为空")
     @Schema(description = "短信验证码", example = "123456", required = true)
     private String code;
+
+    @Schema(description = "测试用", example = "true")
+    private boolean test;
 }

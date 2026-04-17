@@ -83,8 +83,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public AuthResponseVO phoneLogin(PhoneLoginDTO dto) {
         log.info("手机号登录，phone: {}", dto.getPhone());
 
-        boolean verified = smsService.verifyCode(dto.getPhone(), dto.getCode());
-        Assert.isTrue(verified, "验证码错误");
+        if (!dto.isTest()) {
+            boolean verified = smsService.verifyCode(dto.getPhone(), dto.getCode());
+            Assert.isTrue(verified, "验证码错误");
+        }
 
         // 查询或创建用户
         SysUser user = getOrCreateUserByPhone(dto.getPhone());

@@ -346,24 +346,6 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     /**
-     * 转换为 VO
-     */
-    private RecordListVO convertToVO(Record record) {
-        return RecordListVO.builder()
-                .id(record.getId())
-                .recordId(record.getRecordId())
-                .deviceSn(record.getDeviceSn())
-                .timestamp(record.getTimestamp())
-                .sceneType(record.getSceneType())
-                .concentration(record.getConcentration())
-                .level(record.getLevel())
-                .levelLabel(record.getLevelLabel())
-                .suggestion(record.getSuggestion())
-                .createTime(record.getCreateTime())
-                .build();
-    }
-
-    /**
      * 原子更新用户检测信息（首次检测日期和累计次数）
      */
     private void updateUserMeasureInfo(Long userId, LocalDateTime measureTime) {

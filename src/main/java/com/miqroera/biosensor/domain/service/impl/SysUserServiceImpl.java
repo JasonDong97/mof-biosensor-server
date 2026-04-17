@@ -2,6 +2,7 @@ package com.miqroera.biosensor.domain.service.impl;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
@@ -14,10 +15,11 @@ import com.miqroera.biosensor.domain.model.vo.TokenVO;
 import com.miqroera.biosensor.domain.model.vo.UserInfoVO;
 import com.miqroera.biosensor.domain.service.ISmsService;
 import com.miqroera.biosensor.domain.service.ISysUserService;
-import com.miqroera.biosensor.domain.service.MockService;
+import com.miqroera.biosensor.infra.config.WechatConfig;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.infra.domain.model.LoginUser;
 import com.miqroera.biosensor.infra.util.RedisUtil;
+import com.miqroera.biosensor.infra.util.WeChatUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -53,19 +55,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * Refresh Token 过期时间（秒）- 30 天
      */
     private static final long REFRESH_TOKEN_TIMEOUT = 30 * 24 * 60 * 60;
+    private static final String USER_WECHAT_LOGIN_SESSION_KEY = "auth:wx:session:";
+
     private final RedisUtil redisUtil;
-    private final MockService mockService;
     private final ISmsService smsService;
+    private final WechatConfig wechatConfig;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AuthResponseVO wxLogin(WxLoginDTO dto) {
         log.info("微信小程序登录，code: {}", dto.getCode());
 
-        // TODO: 调用微信接口，通过 code 获取 openid
         // 这里暂时使用 mock 数据，实际开发需要替换为真实的微信 API 调用
-        String openid = mockService.mockGetOpenId(dto.getCode());
-
+        var code = dto.getCode();
+        String openid = WeChatUtil.code2Session(code, wechatConfig);
+        Assert.notNull(openid, "微信登录失败，openid 为 null");
         // 查询或创建用户
         SysUser user = getOrCreateUserByOpenid(openid, dto);
 
@@ -79,11 +83,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public AuthResponseVO phoneLogin(PhoneLoginDTO dto) {
         log.info("手机号登录，phone: {}", dto.getPhone());
 
-        // TODO: 验证短信验证码
-        // 这里暂时使用 mock 数据，实际开发需要替换为真实的短信验证逻辑
-        if (!"123456".equals(dto.getCode())) {
-            throw new ServiceException("验证码错误");
-        }
+        boolean verified = smsService.verifyCode(dto.getPhone(), dto.getCode());
+        Assert.isTrue(verified, "验证码错误");
 
         // 查询或创建用户
         SysUser user = getOrCreateUserByPhone(dto.getPhone());

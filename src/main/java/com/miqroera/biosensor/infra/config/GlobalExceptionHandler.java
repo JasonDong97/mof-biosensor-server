@@ -97,7 +97,6 @@ public class GlobalExceptionHandler {
         }
 
         log.error("[{}][{}] {} - {}{}",
-                ServletUtils.getClientIP(),
                 SecurityUtils.getNickName(),
                 request.getMethod(),
                 request.getRequestURI(),

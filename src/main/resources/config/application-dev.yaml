@@ -43,3 +43,7 @@ sms:
     sign-name: 合肥微观纪元数字科技有限
     template-code: SMS_300570402
     template-param: '{"code":"123456","time":5}'
+
+wechat:
+  app-id: ${WECHAT_APP_ID}
+  app-secret: ${WECHAT_APP_SECRET}

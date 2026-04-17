@@ -45,15 +45,21 @@ public class WeChatUtil {
                     return data.getString("openid");
                 }
 
+                var errmsg = data.getString("errmsg");
                 switch (errcode) {
+                    case -1:
+                        throw ServiceException.of("[{}] 系统繁忙，此时请开发者稍候再试", errcode);
                     case 40029:
                         throw ServiceException.of("[{}] code 无效", errcode);
                     case 40226:
                         throw ServiceException.of("[{}] 高风险等级用户，小程序登录拦截 。风险等级详见用户安全解方案: https://developers.weixin.qq.com/miniprogram/dev/framework/operation.html", errcode);
                     case 45011:
                         throw ServiceException.of("[{}] API 调用太频繁，请稍候再试", errcode);
+                    case 40163:
+                        throw ServiceException.of("[{}] code 已被使用", errcode);
                     default:
-                        throw ServiceException.of("[{}] 系统繁忙，此时请开发者稍候再试", errcode);
+                        throw ServiceException.of("[{}] 微信登录失败 {}", errcode, errmsg == null ? "" : ": " + errmsg);
+
                 }
             }
         }

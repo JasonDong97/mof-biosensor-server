@@ -54,4 +54,11 @@ public class DeviceUpdateDTO implements Serializable {
      */
     @Schema(description = "备注")
     private String remark;
+
+    @Schema(description = "蓝牙名称")
+    private String bluetoothName;
+
+    @Schema(description = "蓝牙 MAC 地址")
+    private String bluetoothMac;
+
 }

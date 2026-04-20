@@ -69,4 +69,11 @@ public class DeviceListVO implements Serializable {
      */
     @Schema(description = "绑定时间")
     private LocalDateTime bindTime;
+
+    @Schema(description = "蓝牙名称")
+    private String bluetoothName;
+
+    @Schema(description = "蓝牙 MAC 地址")
+    private String bluetoothMac;
+
 }

@@ -87,4 +87,16 @@ public class DeviceVO implements Serializable {
      */
     @Schema(description = "绑定时间")
     private LocalDateTime bindTime;
+
+    @Schema(description = "绑定的用户 ID")
+    private Long bindUserId;
+
+    @Schema(description = "绑定的用户昵称")
+    private String bindUserNickName;
+
+    @Schema(description = "蓝牙名称")
+    private String bluetoothName;
+
+    @Schema(description = "蓝牙 MAC 地址")
+    private String bluetoothMac;
 }

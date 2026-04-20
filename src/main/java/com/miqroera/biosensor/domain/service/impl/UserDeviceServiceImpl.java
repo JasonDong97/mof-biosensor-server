@@ -163,6 +163,8 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
                             .lastUsedAt(device.getLastUsedAt())
                             .totalUses(device.getTotalUses())
                             .bindTime(userDevice != null ? userDevice.getBindTime() : null)
+                            .bluetoothName(device.getBluetoothName())
+                            .bluetoothMac(device.getBluetoothMac())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -228,6 +230,8 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         device.setBatchNo(dto.getBatchNo());
         device.setStatus("0"); // 正常状态
         device.setRemark(dto.getRemark());
+        device.setBluetoothName(dto.getBluetoothName());
+        device.setBluetoothMac(dto.getBluetoothMac());
         deviceMapper.insert(device);
 
         log.info("管理员添加设备成功，deviceId: {}, deviceSn: {}", device.getId(), dto.getDeviceSn());
@@ -262,6 +266,8 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
         device.setBatchNo(dto.getBatchNo());
         device.setStatus(dto.getStatus());
         device.setRemark(dto.getRemark());
+        device.setBluetoothName(dto.getBluetoothName());
+        device.setBluetoothMac(dto.getBluetoothMac());
         deviceMapper.updateById(device);
 
         log.info("管理员修改设备信息成功，deviceId: {}", deviceId);

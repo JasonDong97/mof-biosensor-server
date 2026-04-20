@@ -12,4 +12,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param measureDate 检测日期
      */
     void updateUserMeasureInfo(@Param("userId") Long userId, @Param("measureDate") java.time.LocalDate measureDate);
+
+    String selectNickNameById(Long userId);
+
 }

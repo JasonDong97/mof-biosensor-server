@@ -2,6 +2,7 @@ package com.miqroera.biosensor.domain.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.miqroera.biosensor.domain.model.Device;
+import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 
 /**
  * <p>
@@ -27,4 +28,20 @@ public interface IDeviceService extends IService<Device> {
      * @param deviceSn 设备 SN
      */
     void checkBinded(Long userId, String deviceSn);
+
+    /**
+     * 获取设备详情
+     *
+     * @param deviceId 设备 ID
+     */
+
+    DeviceVO getBindDeviceDetail(Long deviceId);
+
+    /**
+     * 获取设备详情
+     *
+     * @param deviceSn 设备 SN
+     */
+    DeviceVO getBindDeviceDetail(Long userId, String deviceSn);
+
 }

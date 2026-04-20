@@ -9,5 +9,10 @@
             total_measures = COALESCE(total_measures, 0) + 1
         WHERE id = #{userId}
     </update>
+    <select id="selectNickNameById" resultType="java.lang.String">
+        SELECT nick_name
+        FROM sys_user
+        WHERE id = #{userId}
+    </select>
 
 </mapper>

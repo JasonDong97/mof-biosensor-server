@@ -6,6 +6,7 @@ import com.miqroera.biosensor.domain.model.dto.DeviceBindDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUnbindDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceListVO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
+import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.model.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ import java.util.List;
 public class DeviceController {
 
     private final IUserDeviceService userDeviceService;
+    private final IDeviceService deviceService;
 
     /**
      * 绑定设备
@@ -66,14 +68,13 @@ public class DeviceController {
         return R.ok(deviceList);
     }
 
+
     /**
      * 获取设备详情
      */
     @GetMapping("/{deviceSn}")
     @Operation(summary = "获取设备详情", description = "获取指定设备的详细信息")
     public R<DeviceVO> getDeviceDetail(@PathVariable String deviceSn) {
-        Long userId = StpUtil.getLoginIdAsLong();
-        DeviceVO deviceVO = userDeviceService.getDeviceDetail(userId, deviceSn);
-        return R.ok(deviceVO);
+        return R.ok( deviceService.getBindDeviceDetail(StpUtil.getLoginIdAsLong(), deviceSn));
     }
 }

@@ -3,6 +3,7 @@ package com.miqroera.biosensor.web.admin;
 import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
 import com.miqroera.biosensor.domain.model.dto.DeviceUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
+import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
 import com.miqroera.biosensor.infra.domain.model.R;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminDeviceController {
 
     private final IUserDeviceService userDeviceService;
+    private final IDeviceService deviceService;
 
     /**
      * 添加设备
@@ -57,5 +59,12 @@ public class AdminDeviceController {
 
         DeviceVO deviceVO = userDeviceService.updateDevice(deviceId, dto);
         return R.ok(deviceVO);
+    }
+
+
+    @GetMapping("/{deviceId}")
+    @Operation(summary = "获取设备详情", description = "管理员获取设备详情")
+    public R<DeviceVO> getDeviceDetail(@PathVariable Long deviceId) {
+        return R.ok(deviceService.getBindDeviceDetail(deviceId));
     }
 }

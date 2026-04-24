@@ -1,9 +1,7 @@
 package com.miqroera.biosensor.domain.service.impl;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.SysUser;
@@ -139,6 +137,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new ServiceException("用户不存在");
         }
 
+        return convertVO(user);
+    }
+
+    private UserInfoVO convertVO(SysUser user) {
         return UserInfoVO.builder()
                 .id(user.getId())
                 .openid(user.getWxMpOpenid())
@@ -235,34 +237,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 根据 OpenID 查询或创建用户
      */
     private SysUser getOrCreateUserByOpenid(String openid, WxLoginDTO dto) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getWxMpOpenid, openid);
-        SysUser user = getOne(queryWrapper);
+        SysUser user = this.lambdaQuery().eq(SysUser::getWxMpOpenid, openid).one();
 
-        boolean isNew = user == null;
-
-        if (isNew) {
+        if (user == null) {
             // 创建新用户
             user = new SysUser();
-            user.setCreateTime(LocalDateTime.now());
+            user.setAvatar(dto.getAvatar());
+            user.setWxMpOpenid(openid);
+            user.setNickName(dto.getNickname() != null ? dto.getNickname() : "微信用户");
+            user.setSex(String.valueOf(dto.getGender() == null ? 0 : dto.getGender()));
+            user.setPhonenumber(dto.getPhonenumber());
+            user.setUserType("0"); // 普通用户
+            user.setStatus("0");   // 正常状态
+            user.setDelFlag("0");  // 未删除
             user.setRegTime(LocalDateTime.now());
+            user.setCreateTime(LocalDateTime.now());
+            save(user);
         }
 
-        user.setWxMpOpenid(openid);
-        user.setNickName(dto.getNickname() != null ? dto.getNickname() : "微信用户");
-        user.setAvatar(dto.getAvatar());
-        user.setSex(dto.getGender() != null ? String.valueOf(dto.getGender()) : "0");
-        user.setUserType("0"); // 普通用户
-        user.setStatus("0");   // 正常状态
-        user.setDelFlag("0");  // 未删除
-        user.setPhonenumber(dto.getPhonenumber());
-        if (isNew) {
-            save(user);
-            log.info("创建新用户，userId: {}, openid: {}", user.getId(), openid);
-        } else {
-            updateById(user);
-            log.info("更新用户信息，userId: {}, openid: {}", user.getId(), openid);
-        }
         return user;
     }
 
@@ -285,7 +277,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             save(user);
             log.info("创建新用户，userId: {}, phone: {}", user.getId(), phone);
         }
-
         return user;
     }
 
@@ -295,44 +286,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private AuthResponseVO buildAuthResponseWithRefreshToken(SysUser user) {
         // 登录并获取 Token
         StpUtil.login(user.getId());
-        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-
-        // 生成新的 Refresh Token
-        String newRefreshToken = generateRefreshToken(user.getId());
 
         // 构建 Token VO
         TokenVO tokenVO = TokenVO.builder()
-                .accessToken(tokenInfo.getTokenValue())
-                .refreshToken(newRefreshToken)
+                .accessToken(StpUtil.getTokenValue())
+                .refreshToken(generateRefreshToken(user.getId()))
                 .expiresIn(TOKEN_TIMEOUT)
                 .tokenType("Bearer")
                 .build();
 
-        // 构建用户信息 VO
-        UserInfoVO userInfoVO = UserInfoVO.builder()
-                .id(user.getId())
-                .openid(user.getWxMpOpenid())
-                .userName(user.getUserName())
-                .nickName(user.getNickName())
-                .avatar(user.getAvatar())
-                .sex(user.getSex())
-                .phonenumber(maskPhone(user.getPhonenumber()))
-                .userType(user.getUserType())
-                .birthday(user.getBirthday())
-                .height(user.getHeight())
-                .weight(user.getWeight())
-                .firstMeasureDate(user.getFirstMeasureDate())
-                .totalMeasures(user.getTotalMeasures())
-                .regTime(user.getRegTime())
-                .build();
-
-        // 更新最后登录时间
-        user.setLoginDate(LocalDateTime.now());
-        updateById(user);
-
         return AuthResponseVO.builder()
                 .token(tokenVO)
-                .userInfo(userInfoVO)
+                .userInfo(convertVO(user))
                 .build();
     }
 

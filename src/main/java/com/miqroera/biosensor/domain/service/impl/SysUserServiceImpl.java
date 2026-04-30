@@ -148,7 +148,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .nickName(user.getNickName())
                 .avatar(user.getAvatar())
                 .sex(user.getSex())
-                .phonenumber(maskPhone(user.getPhonenumber()))
+                .phonenumber(user.getPhonenumber())
                 .userType(user.getUserType())
                 .birthday(user.getBirthday())
                 .height(user.getHeight())

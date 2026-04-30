@@ -165,6 +165,7 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
                             .bindTime(userDevice != null ? userDevice.getBindTime() : null)
                             .bluetoothName(device.getBluetoothName())
                             .bluetoothMac(device.getBluetoothMac())
+                            .bluetoothId(device.getBluetoothId())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -284,6 +285,8 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
                 .build();
     }
 
+
+
     /**
      * 自动注册新设备（保留待用）
      * 当设备 SN 不存在时，自动创建新设备记录
@@ -317,6 +320,9 @@ public class UserDeviceServiceImpl extends ServiceImpl<UserDeviceMapper, UserDev
                 .totalUses(device.getTotalUses())
                 .status(device.getStatus())
                 .bindTime(bindTime)
+                .bluetoothId(device.getBluetoothId())
+                .bluetoothName(device.getBluetoothName())
+                .bluetoothMac(device.getBluetoothMac())
                 .build();
     }
 }

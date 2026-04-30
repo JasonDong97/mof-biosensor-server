@@ -1,6 +1,7 @@
 package com.miqroera.biosensor.web.admin;
 
 import com.miqroera.biosensor.domain.model.dto.DeviceAddDTO;
+import com.miqroera.biosensor.domain.model.dto.DevicePageQuery;
 import com.miqroera.biosensor.domain.model.dto.DeviceUpdateDTO;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 import com.miqroera.biosensor.domain.service.IDeviceService;
@@ -30,6 +31,12 @@ public class AdminDeviceController {
 
     private final IUserDeviceService userDeviceService;
     private final IDeviceService deviceService;
+
+    @GetMapping("/page")
+    @Operation(summary = "分页查询设备列表", description = "管理员分页查询设备列表")
+    public R<?> getDevicePage(DevicePageQuery query) {
+        return R.ok(deviceService.getDevicePage(query));
+    }
 
     /**
      * 添加设备

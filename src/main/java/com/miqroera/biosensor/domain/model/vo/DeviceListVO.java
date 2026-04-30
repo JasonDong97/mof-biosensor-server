@@ -76,4 +76,7 @@ public class DeviceListVO implements Serializable {
     @Schema(description = "蓝牙 MAC 地址")
     private String bluetoothMac;
 
+    @Schema(description = "蓝牙 ID")
+    private String bluetoothId;
+
 }

@@ -79,4 +79,6 @@ public interface IUserDeviceService extends IService<UserDevice> {
      * @return 更新后的设备信息
      */
     DeviceVO updateDevice(Long deviceId, DeviceUpdateDTO dto);
+
+
 }

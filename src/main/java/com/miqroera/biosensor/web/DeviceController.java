@@ -64,8 +64,7 @@ public class DeviceController {
     @Operation(summary = "获取设备列表", description = "获取当前用户已绑定的设备列表")
     public R<List<DeviceListVO>> getDeviceList() {
         Long userId = StpUtil.getLoginIdAsLong();
-        List<DeviceListVO> deviceList = userDeviceService.getUserDeviceList(userId);
-        return R.ok(deviceList);
+        return R.ok(userDeviceService.getUserDeviceList(userId));
     }
 
 

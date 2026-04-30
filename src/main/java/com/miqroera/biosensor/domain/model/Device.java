@@ -126,4 +126,7 @@ public class Device implements Serializable {
 
     @Schema(description = "蓝牙MAC")
     private String bluetoothMac;
+
+    @Schema(description = "蓝牙ID")
+    private String bluetoothId;
 }

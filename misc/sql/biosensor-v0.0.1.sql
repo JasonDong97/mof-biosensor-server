@@ -197,3 +197,6 @@ alter table t_device
     add column bluetooth_name varchar(50) comment '蓝牙名称';
 alter table t_device
     add column bluetooth_mac varchar(32) comment '蓝牙 MAC 地址';
+
+-- 增加蓝牙 ID 字段
+alter table t_device add column bluetooth_id varchar(64) comment '蓝牙 ID';

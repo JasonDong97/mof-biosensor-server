@@ -1,15 +1,19 @@
 package com.miqroera.biosensor.domain.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.miqroera.biosensor.domain.mapper.DeviceMapper;
 import com.miqroera.biosensor.domain.mapper.SysUserMapper;
 import com.miqroera.biosensor.domain.model.Device;
 import com.miqroera.biosensor.domain.model.UserDevice;
+import com.miqroera.biosensor.domain.model.dto.DevicePageQuery;
 import com.miqroera.biosensor.domain.model.vo.DeviceVO;
 import com.miqroera.biosensor.domain.service.IDeviceService;
 import com.miqroera.biosensor.domain.service.IUserDeviceService;
 import com.miqroera.biosensor.infra.domain.exception.ServiceException;
+import com.miqroera.biosensor.infra.domain.model.PageResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -94,6 +98,13 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
 
         return vo;
+    }
+
+    @Override
+    public PageResult<DeviceVO> getDevicePage(DevicePageQuery query) {
+        IPage<Device> page = this.lambdaQuery()
+                .page(Page.of(query.getPageNum(), query.getPageSize()));
+        return PageResult.build(page, DeviceVO.class);
     }
 
 

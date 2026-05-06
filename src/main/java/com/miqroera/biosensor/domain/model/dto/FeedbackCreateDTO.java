@@ -2,6 +2,7 @@ package com.miqroera.biosensor.domain.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.io.Serial;
@@ -33,4 +34,9 @@ public class FeedbackCreateDTO implements Serializable {
      */
     @Schema(description = "图片 URL 列表", example = "[\"https://example.com/img1.jpg\",\"https://example.com/img2.jpg\"]")
     private List<String> images;
+
+
+    @Schema(description = "联系方式，手机号", example = "13812345678")
+    @Pattern(regexp = "^1[3-9][0-9]{9}$", message = "手机号码格式不正确")
+    private String phoneNumber;
 }

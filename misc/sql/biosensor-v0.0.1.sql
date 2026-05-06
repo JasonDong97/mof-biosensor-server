@@ -200,3 +200,9 @@ alter table t_device
 
 -- 增加蓝牙 ID 字段
 alter table t_device add column bluetooth_id varchar(64) comment '蓝牙 ID';
+
+-- 添加联系方式字段
+alter table t_feedback add column phone_number varchar(11) comment '联系方式，手机号码';
+
+-- 添加完成时间字段
+alter table t_feedback add column complete_time datetime comment '完成时间';

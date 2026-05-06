@@ -1,8 +1,10 @@
 package com.miqroera.biosensor.domain.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +19,8 @@ import java.util.List;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(name = "FeedbackVO", description = "用户反馈响应")
 public class FeedbackVO implements Serializable {
 
@@ -44,7 +48,7 @@ public class FeedbackVO implements Serializable {
     /**
      * 状态（0 待回复 1 已回复）
      */
-    @Schema(description = "状态（0 待回复 1 已回复）")
+    @Schema(description = "状态（0 已收到， 1 跟进中，2 已完结）")
     private Byte status;
 
     /**
@@ -64,4 +68,14 @@ public class FeedbackVO implements Serializable {
      */
     @Schema(description = "提交时间")
     private LocalDateTime createTime;
+
+    @Schema(description = "联系方式，手机号")
+    private String phoneNumber;
+
+    /**
+     * 完结时间
+     */
+    @Schema(description = "完结时间")
+    private LocalDateTime completeTime;
+
 }

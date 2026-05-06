@@ -3,6 +3,7 @@ package com.miqroera.biosensor.web;
 import cn.dev33.satoken.stp.StpUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.miqroera.biosensor.domain.model.dto.FeedbackCreateDTO;
+import com.miqroera.biosensor.domain.model.dto.FeedbackPageParam;
 import com.miqroera.biosensor.domain.model.vo.FeedbackVO;
 import com.miqroera.biosensor.domain.service.IFeedbackService;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
@@ -46,11 +47,9 @@ public class FeedbackController {
      */
     @GetMapping
     @Operation(summary = "获取用户反馈列表", description = "分页获取当前用户的反馈列表")
-    public R<PageResult<FeedbackVO>> getFeedbackList(
-            @RequestParam(defaultValue = "1") Integer current,
-            @RequestParam(defaultValue = "10") Integer size) {
+    public R<PageResult<FeedbackVO>> getFeedbackList(FeedbackPageParam param) {
         Long userId = StpUtil.getLoginIdAsLong();
-        return R.ok(feedbackService.getUserFeedbacks(userId, current, size));
+        return R.ok(feedbackService.getUserFeedbacks(userId, param));
     }
 
     /**

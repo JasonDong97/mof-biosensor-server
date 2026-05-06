@@ -34,6 +34,12 @@ public class SecurityUtils {
     @Autowired
     private ISysUserService userService;
 
+    public static void checkAdmin() {
+        if (isNotAdmin()) {
+            throw new RuntimeException("没有管理员权限!");
+        }
+    }
+
     @PostConstruct
     public void init() {
         SecurityUtils.getLoginUser = userId -> userService.getLoginUserById(Long.valueOf(userId.toString()));
@@ -82,12 +88,16 @@ public class SecurityUtils {
         }
     }
 
-    public static boolean isAdmin() {
-        return getLoginUser().getIsAdmin() != null && getLoginUser().getIsAdmin();
+    public static boolean isNotAdmin() {
+        LoginUser loginUser = getLoginUser();
+        if (loginUser != null){
+            return !loginUser.getIsAdmin() && !loginUser.isSuperAdmin();
+        }
+        return true;
     }
 
-    public static boolean isNotAdmin() {
-        return !isAdmin();
+    public static boolean isAdmin() {
+        return !isNotAdmin();
     }
 
     public static boolean isLoginUser(@NotNull Long userId) {

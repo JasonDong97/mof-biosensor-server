@@ -3,6 +3,7 @@ package com.miqroera.biosensor.domain.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.miqroera.biosensor.domain.model.Feedback;
 import com.miqroera.biosensor.domain.model.dto.FeedbackCreateDTO;
+import com.miqroera.biosensor.domain.model.dto.FeedbackPageParam;
 import com.miqroera.biosensor.domain.model.vo.FeedbackVO;
 import com.miqroera.biosensor.infra.domain.model.PageResult;
 
@@ -26,16 +27,6 @@ public interface IFeedbackService extends IService<Feedback> {
     Feedback submitFeedback(Long userId, FeedbackCreateDTO dto);
 
     /**
-     * 分页查询用户反馈列表
-     *
-     * @param userId 用户 ID
-     * @param current 当前页
-     * @param size    每页大小
-     * @return 反馈列表分页结果
-     */
-    PageResult<FeedbackVO> getUserFeedbacks(Long userId, Integer current, Integer size);
-
-    /**
      * 根据 ID 获取反馈详情
      *
      * @param userId 用户 ID
@@ -43,4 +34,13 @@ public interface IFeedbackService extends IService<Feedback> {
      * @return 反馈详情
      */
     FeedbackVO getFeedbackDetail(Long userId, Long id);
+
+    /**
+     * 分页查询用户反馈列表
+     *
+     * @param userId 用户 ID
+     * @param param  分页参数
+     * @return 反馈列表分页结果
+     */
+    PageResult<FeedbackVO> getUserFeedbacks(Long userId, FeedbackPageParam param);
 }
